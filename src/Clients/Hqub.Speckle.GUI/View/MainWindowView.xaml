@@ -1,0 +1,15 @@
+﻿<view:BaseWindowView x:Class="Hqub.Speckle.GUI.View.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:regions="http://www.codeplex.com/CompositeWPF"
+        xmlns:SpeckleStudio="clr-namespace:Hqub.Speckle.GUI"
+        xmlns:view="clr-namespace:Hqub.Speckle.GUI.View"
+        WindowStartupLocation="Manual"
+        WindowState="Maximized"
+        Title="MainWindowView" Height="350" Width="525">
+    <ContentControl
+            x:Name="MainRegionControl"
+            regions:RegionManager.RegionName="{x:Static SpeckleStudio:RegionNames.MainRegionName}"
+            >
+    </ContentControl>
+</view:BaseWindowView>
