@@ -24,15 +24,15 @@ namespace Hqub.Speckle.GUI
 
         protected override void ConfigureModuleCatalog()
         {
-//            ModuleCatalog.AddModule(new ModuleInfo
-//            {
-//                ModuleName = "AuthModule",
-//                ModuleType =
-//                    typeof(Modules.AuthModule)
-//                    .AssemblyQualifiedName,
-//                InitializationMode =
-//                    InitializationMode.OnDemand
-//            });
+            ModuleCatalog.AddModule(new ModuleInfo
+            {
+                ModuleName = "ShellModule",
+                ModuleType =
+                    typeof(Modules.ShellModule)
+                    .AssemblyQualifiedName,
+                InitializationMode =
+                    InitializationMode.OnDemand
+            });
         }
 
         protected override void ConfigureContainer()
@@ -40,12 +40,32 @@ namespace Hqub.Speckle.GUI
             Container.RegisterInstance(Container);
 
             // View
-            Container.RegisterType(typeof(View.MainWindowView));
+            ConfigureViewContainer();
 
             // ViewModel
-            Container.RegisterType(typeof (ViewModel.MainViewModel));
+            ConfigureViewModelContainer();
+
+            // Modules
+//            ConfigureModuleContainer();
 
             base.ConfigureContainer();
+        }
+
+        private void ConfigureModuleContainer()
+        {
+            Container.RegisterType(typeof (Modules.ShellModule));
+        }
+
+        private void ConfigureViewContainer()
+        {
+            Container.RegisterType(typeof(MainWindowView));
+            Container.RegisterType(typeof (View.Shell.ShellView));
+        }
+
+        private void ConfigureViewModelContainer()
+        {
+            Container.RegisterType(typeof(ViewModel.MainViewModel));
+            Container.RegisterType(typeof (ViewModel.Shell.ShellViewModel));
         }
     }
 }
