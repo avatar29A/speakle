@@ -40,10 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitmapExtensions\BitmapTools.cs" />
+    <Compile Include="BitmapExtensions\LockBitmap.cs" />
+    <Compile Include="Correlation\PHashCorrelationEngine.cs" />
+    <Compile Include="Correlation\SpegoCorrelationEngine.cs" />
+    <Compile Include="Experiment.cs" />
+    <Compile Include="ICorrelationEngine.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="ImageMatrix.cs" />
-    <Compile Include="SpeckleCorrelation.cs" />
+    <Compile Include="Model\CorrelationValue.cs" />
+    <Compile Include="Model\ImageWrapper.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

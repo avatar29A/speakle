@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Hqub.Speckle.GUI.Controls.PreviewEtalonImage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Image Source="/Content/Demo/Image000000.bmp" Stretch="Fill"/>
+        <Canvas x:Name="Holst" 
+                MouseDown="Canvas_MouseDown" 
+                MouseMove="Canvas_MouseMove"
+                MouseUp="Canvas_MouseUp"
+                Background="Transparent"/>
+    </Grid>
+</UserControl>

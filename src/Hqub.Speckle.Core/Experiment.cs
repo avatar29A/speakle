@@ -1,20 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Hqub.Speckle.GUI.Experiment;
+using Hqub.Speckle.Core.Annotations;
+using Hqub.Speckle.Core.Model;
 
 namespace Hqub.Speckle.Core
 {
-    public class Experiment : IExperiment
+    public class Experiment : IExperiment, INotifyPropertyChanged
     {
+        private ObservableCollection<ImageWrapper> _images;
+
         private Experiment()
         {
 
         }
 
         #region Public Properties
+
+        public ObservableCollection<ImageWrapper> Images
+        {
+            get { return _images; }
+            set
+            {
+                if (Equals(value, _images)) return;
+                _images = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 
@@ -37,5 +54,17 @@ namespace Hqub.Speckle.Core
 
         #endregion
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public interface IExperiment
+    {
     }
 }

@@ -7,9 +7,21 @@
         WindowStartupLocation="Manual"
         WindowState="Maximized"
         Title="MainWindowView" Height="350" Width="525">
-    <ContentControl
-            x:Name="MainRegionControl"
-            regions:RegionManager.RegionName="{x:Static SpeckleStudio:RegionNames.MainRegionName}"
-            >
-    </ContentControl>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ContentControl
+                    x:Name="MainRegionControl"
+                    regions:RegionManager.RegionName="{x:Static SpeckleStudio:RegionNames.MainRegionName}"
+                    >
+        </ContentControl>
+        
+        <StatusBar Grid.Row="1">
+            <StatusBarItem>
+                <Label>dsfdf</Label>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
 </view:BaseWindowView>

@@ -45,8 +45,8 @@ namespace Hqub.Speckle.GUI
             // ViewModel
             ConfigureViewModelContainer();
 
-            // Modules
-//            ConfigureModuleContainer();
+            // Other
+            ConfigureOtherTypes();
 
             base.ConfigureContainer();
         }
@@ -66,6 +66,16 @@ namespace Hqub.Speckle.GUI
         {
             Container.RegisterType(typeof(ViewModel.MainViewModel));
             Container.RegisterType(typeof (ViewModel.Shell.ShellViewModel));
+        }
+
+        private void ConfigureOtherTypes()
+        {
+            // Logger
+            Container.RegisterType(typeof (Core.ILogger), typeof (Logger));
+
+            // Correlation Engines
+            Container.RegisterType(typeof (Core.Correlation.PHashCorrelationEngine), new InjectionProperty("Logger"));
+            Container.RegisterType(typeof (Core.Correlation.SpegoCorrelationEngine), new InjectionProperty("Logger"));
         }
     }
 }

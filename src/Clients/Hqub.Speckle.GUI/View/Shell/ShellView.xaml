@@ -1,75 +1,151 @@
-﻿<view:BaseUserControlView x:Class="Hqub.Speckle.GUI.View.Shell.ShellView"
+﻿<view:BaseUserControlView
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view="clr-namespace:Hqub.Speckle.GUI.View"
+             xmlns:telerikDocking="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Docking"
+             xmlns:controls="clr-namespace:Hqub.Speckle.GUI.Controls"
+             x:Class="Hqub.Speckle.GUI.View.Shell.ShellView"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="800">
+    <view:BaseUserControlView.Resources>
+        <DataTemplate x:Key="imageTemplate">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Content="{Binding Name}"/>
+<!--                <TextBlock Text="{Binding Name}"/>-->
+            </StackPanel>
+           
+        </DataTemplate>
+    </view:BaseUserControlView.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
+
         <Menu>
             <MenuItem Header="Файл">
-                <MenuItem Header="Новый эксперимент"></MenuItem>
+                <MenuItem Header="Новый эксперимент"/>
                 <Separator/>
-                <MenuItem Header="Выход"></MenuItem>
+                <MenuItem Header="Выход"/>
             </MenuItem>
             <MenuItem Header="?">
                 <MenuItem Header="Настройки"/>
                 <MenuItem Header="Помощь"/>
             </MenuItem>
         </Menu>
-        
+
         <DockPanel Grid.Row="1"
                    LastChildFill="True"
                    >
-            <ToolBar DockPanel.Dock="Right">
-                <StackPanel Orientation="Horizontal" Grid.Column="1"
-                        HorizontalAlignment="Right"
-                        >
-                    <ToggleButton Width="24" 
-                        Height="24" 
-                        Content="2x2" 
-                        Tag="2" 
-                        ToolTip="Включить сетку 2 на 2"
-                        Click="ChangeGridSize_OnClick"/>
-                </StackPanel>
-            </ToolBar>
-            
+
             <ToolBar Grid.Row="1" HorizontalAlignment="Stretch">
-               
+                <Button Height="24" 
+            		Width="24"
+            		Command="{Binding CreateExpirementCommand}"
+            		ToolTip="Новый эксперимент"
+                        Content="O"
+                        />
+
+                <Button Height="24" 
+            		Width="24"
+            		Command="{Binding LoadExpirementFilesCommand}"
+            		ToolTip="Загрузить файлы эксперимента"
+                        Content="L"
+                        />
+                
+                <Separator/>
+
+                <Button Height="24" 
+            		Width="24"
+            		Command="{Binding StartExperimentCommand}"
+            		ToolTip="Запустить эксперимент"
+                        Content="S"
+                 />
+
             </ToolBar>
-            
-            
         </DockPanel>
-        
-        
 
         <Grid Grid.Row="2">
-           <Grid.ColumnDefinitions>
-               <ColumnDefinition Width="Auto"/>
-               <ColumnDefinition/>
-           </Grid.ColumnDefinitions>
-            
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            
-            <ListBox Width="200"
-                     Grid.Row="1"
-                     
-                     ></ListBox>
-          
-            <Grid x:Name="ContentGrid" Grid.Column="1" 
+
+            <Grid x:Name="ContentGrid"
                   Grid.Row="1"
                   ShowGridLines="True">
+                <telerikDocking:RadDocking>
+                    <telerikDocking:RadDocking.DocumentHost>
+                        <telerikDocking:RadSplitContainer  >
+                            <telerikDocking:RadPaneGroup x:Name="Workarea">
+                                <telerikDocking:RadPane Header="Рабочая область"
+                                                        CanUserClose="False">
+                                </telerikDocking:RadPane>
+                                
+                            </telerikDocking:RadPaneGroup>
+                            
+                            <telerikDocking:RadPaneGroup>
+                                <telerikDocking:RadPane Header="Эталон"
+                                                    CanUserClose="False"
+                                                
+                                                    >
+                                    <controls:PreviewEtalonImage/>
+                                </telerikDocking:RadPane>
+                            </telerikDocking:RadPaneGroup>
+                        </telerikDocking:RadSplitContainer>
+                        
+                    </telerikDocking:RadDocking.DocumentHost>
+
+                    <telerikDocking:RadSplitContainer InitialPosition="DockedLeft">
+                        <telerikDocking:RadPaneGroup>
+                            <telerikDocking:RadPane Header="Файлы эксперимента"
+                                                    CanUserClose="False"
+                                                    >
+                                <DockPanel>
+                                    <ToolBar DockPanel.Dock="Top">
+                                        <Button Height="16"
+                                                Width="16"
+                                                Content="Ch"
+                                                FontSize="10"
+                                                />
+
+                                        <Button Height="16"
+                                                Width="16"
+                                                Content="Un"
+                                                FontSize="10"
+                                                />
+                                    </ToolBar>
+                                    <ListBox
+        		                        ItemsSource="{Binding Experiment.Images}"
+        		                        ItemTemplate="{StaticResource imageTemplate}"
+        		                        />
+                                </DockPanel>
+                                
+                            </telerikDocking:RadPane>
+                           
+                        </telerikDocking:RadPaneGroup>
+                    </telerikDocking:RadSplitContainer>
+
+                    <telerikDocking:RadSplitContainer InitialPosition="DockedBottom">
+                        <telerikDocking:RadPaneGroup>
+                            <telerikDocking:RadPane Header="Значения корреляции"
+                                                    CanUserClose="False"
+                                                    >
+                                <ListBox
+        		                        ItemsSource="{Binding Images}"
+        		                        ItemTemplate="{StaticResource imageTemplate}"
+        		                        />
+                            </telerikDocking:RadPane>
+
+                        </telerikDocking:RadPaneGroup>
+                    </telerikDocking:RadSplitContainer>
+                </telerikDocking:RadDocking>
             </Grid>
+           
         </Grid>
     </Grid>
 </view:BaseUserControlView>
