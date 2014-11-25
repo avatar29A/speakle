@@ -1,20 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Documents;
 using System.Windows.Input;
 using Hqub.Speckle.Core.Model;
-using Hqub.Speckle.GUI.Model;
 using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.UnityExtensions;
 using Microsoft.Win32;
 
 namespace Hqub.Speckle.GUI.ViewModel.Shell
 {
     public class ShellViewModel : BaseViewModel
     {
-        private readonly Core.Experiment _experiment;
+        private Core.Experiment _experiment;
 
         public ShellViewModel()
         {
@@ -26,11 +21,26 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         public Core.Experiment Experiment
         {
             get { return _experiment; }
+            set
+            {
+                _experiment = value;
+                RaisePropertyChanged("Experiment");
+            }
         }
 
         #endregion
 
         #region Commands
+
+        public ICommand CreateExpirementCommand
+        {
+            get { return new DelegateCommand(CreateExpirementCommandExecute); }
+        }
+
+        private void CreateExpirementCommandExecute()
+        {
+            Experiment = Core.Experiment.Get(true);
+        }
 
         public ICommand LoadExpirementFilesCommand
         {
@@ -44,21 +54,44 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             fileDialog.Filter = "Image Files (*.bmp, *.jpg)|*.bmp;*.jpg|All Files (*.*)|*.*";
             var result = fileDialog.ShowDialog();
 
-            if(result != true)
+            if (result != true)
                 return;
 
-            Experiment.Images = new ObservableCollection<ImageWrapper>(fileDialog.FileNames.Select(f => new ImageWrapper(f)));
+            Experiment.Images =
+                new ObservableCollection<ImageWrapper>(fileDialog.FileNames.Select(f => new ImageWrapper(f)));
         }
 
-        public ICommand CreateExpirementCommand
+        #region Checked Unchecked commands
+
+        public ICommand CheckAllItemsCommand
         {
-            get { return new DelegateCommand(CreateExpirementCommandExecute); }
+            get { return new DelegateCommand(CheckAllItemsCommandExecute); }
         }
 
-        private void CreateExpirementCommandExecute()
+        private void CheckAllItemsCommandExecute()
         {
-            throw new System.NotImplementedException();
+            CheckUncheckAllItems(true);
         }
+
+        public ICommand UnCheckAllItemsCommand
+        {
+            get { return new DelegateCommand(UnCheckAllItemsCommandExecute); }
+        }
+
+        private void UnCheckAllItemsCommandExecute()
+        {
+            CheckUncheckAllItems(false);
+        }
+
+        private void CheckUncheckAllItems(bool val)
+        {
+            foreach (var image in Experiment.Images)
+            {
+                image.IsChecked = val;
+            }
+        }
+
+        #endregion
 
         #endregion
     }

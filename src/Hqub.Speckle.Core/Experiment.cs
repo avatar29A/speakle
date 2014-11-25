@@ -35,7 +35,6 @@ namespace Hqub.Speckle.Core
 
         #endregion
 
-
         #region Static Interfaces
 
         private static Experiment _instance;

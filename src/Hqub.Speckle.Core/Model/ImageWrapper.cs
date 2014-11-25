@@ -21,7 +21,7 @@ namespace Hqub.Speckle.Core.Model
         }
 
 
-        public Core.Model.CorrelationValue Correlation { get; set; }
+        public CorrelationValue Correlation { get; set; }
 
         public string Name
         {

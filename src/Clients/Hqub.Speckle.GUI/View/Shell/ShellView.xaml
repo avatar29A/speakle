@@ -10,10 +10,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
     <view:BaseUserControlView.Resources>
+        <Style x:Key="ToolbarButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="36"/>
+            <Setter Property="Height" Value="36"/>
+        </Style>
+        
         <DataTemplate x:Key="imageTemplate">
             <StackPanel Orientation="Horizontal">
-                <CheckBox Content="{Binding Name}"/>
-<!--                <TextBlock Text="{Binding Name}"/>-->
+                <CheckBox Content="{Binding Name}"
+                          IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                          />
             </StackPanel>
            
         </DataTemplate>
@@ -32,6 +38,12 @@
                 <Separator/>
                 <MenuItem Header="Выход"/>
             </MenuItem>
+            
+            <MenuItem Header="Методы расчета">
+                <MenuItem Header="Алгоритм из ПО 'Спего'" Tag="spego"/>
+                <MenuItem Header="Алгоритм на основе pHash" Tag="phash"/>
+            </MenuItem>
+            
             <MenuItem Header="?">
                 <MenuItem Header="Настройки"/>
                 <MenuItem Header="Помощь"/>
@@ -42,29 +54,46 @@
                    LastChildFill="True"
                    >
 
-            <ToolBar Grid.Row="1" HorizontalAlignment="Stretch">
-                <Button Height="24" 
-            		Width="24"
+            <ToolBar Grid.Row="1" HorizontalAlignment="Stretch"
+                     Background="White"
+                     >
+                <Button 
+                    Style="{StaticResource ToolbarButtonStyle}"
             		Command="{Binding CreateExpirementCommand}"
             		ToolTip="Новый эксперимент"
-                        Content="O"
-                        />
+                        >
+                    <Image Source="/Content/create.png"/>
+                </Button>
 
-                <Button Height="24" 
-            		Width="24"
+                <Button 
+                    Style="{StaticResource ToolbarButtonStyle}"
             		Command="{Binding LoadExpirementFilesCommand}"
-            		ToolTip="Загрузить файлы эксперимента"
-                        Content="L"
-                        />
+            		ToolTip="Добавить файлы эксперимента"
+                        >
+                    <Image Source="/Content/folder.png"/>
+                </Button>
                 
                 <Separator/>
 
-                <Button Height="24" 
-            		Width="24"
+                <Button 
+                    Style="{StaticResource ToolbarButtonStyle}"
             		Command="{Binding StartExperimentCommand}"
             		ToolTip="Запустить эксперимент"
-                        Content="S"
-                 />
+                    IsEnabled="False"
+                 >
+                    <Image Source="/Content/play.png"/>
+                </Button>
+
+                <Separator/>
+
+                <Button 
+                    Style="{StaticResource ToolbarButtonStyle}"
+            		Command="{Binding StartExperimentCommand}"
+            		ToolTip="Видео"
+                    IsEnabled="False"
+                 >
+                    <Image Source="/Content/video.png"/>
+                </Button>
 
             </ToolBar>
         </DockPanel>
@@ -107,18 +136,25 @@
                                                     >
                                 <DockPanel>
                                     <ToolBar DockPanel.Dock="Top">
-                                        <Button Height="16"
-                                                Width="16"
-                                                Content="Ch"
-                                                FontSize="10"
-                                                />
+                                        <Button Style="{StaticResource ToolbarButtonStyle}"
+                                                Command="{Binding CheckAllItemsCommand}"
+                                                >
+                                            <Image Source="/Content/check_all.png"
+                                                   ToolTip="Выбрать все элементы"
+                                                   />
+                                        </Button>
 
-                                        <Button Height="16"
-                                                Width="16"
-                                                Content="Un"
-                                                FontSize="10"
-                                                />
+                                        <Button Style="{StaticResource ToolbarButtonStyle}"
+                                                Command="{Binding UnCheckAllItemsCommand}"
+                                                >
+                                            <Image Source="/Content/uncheck_all.png"
+                                                   ToolTip="Убрать выбор со всех элементов"
+                                                   />
+                                        </Button>
                                     </ToolBar>
+                                    <StatusBar DockPanel.Dock="Bottom">
+                                        <TextBlock Text="{Binding Experiment.Images.Count, StringFormat={}Кол-во кадров: {0}}"></TextBlock>
+                                    </StatusBar>
                                     <ListBox
         		                        ItemsSource="{Binding Experiment.Images}"
         		                        ItemTemplate="{StaticResource imageTemplate}"
