@@ -168,6 +168,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Content\Demo\Image000000.bmp" />
+    <Resource Include="Content\loadEtalonBgr.png" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

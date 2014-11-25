@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace Hqub.Speckle.GUI.Controls
 {
@@ -20,22 +22,42 @@ namespace Hqub.Speckle.GUI.Controls
     /// </summary>
     public partial class PreviewEtalonImage : UserControl
     {
+        #region Fields
+
+        private bool _isBackgroundSet = false;
+        private Point _startPoint;
+        private Rectangle _rect;
+
+        #endregion
+
+        #region .ctor
+
         public PreviewEtalonImage()
         {
             InitializeComponent();
         }
 
-        protected override void OnRender(DrawingContext drawingContext)
+        #endregion
+
+        #region Properties
+
+        public string EtalonFilePath { get; set; }
+
+        public Rectangle Workarea
         {
-            DrawRectangle(0, 0, Holst.ActualWidth - 1, Holst.ActualHeight - 1);
-            base.OnRender(drawingContext);
-        }
+            get { return _rect; }
+            set { _rect = value; }
+        } 
+
+        #endregion
+
+        #region Private methods
 
         private void DrawRectangle(double x, double y, double width, double height)
         {
-            Holst.Children.Remove(rect);
+            Holst.Children.Remove(_rect);
 
-            rect = new Rectangle
+            _rect = new Rectangle
             {
                 Stroke = Brushes.LightBlue,
                 StrokeThickness = 2,
@@ -43,46 +65,80 @@ namespace Hqub.Speckle.GUI.Controls
                 Height = height
             };
 
-            Canvas.SetLeft(rect, x);
-            Canvas.SetRight(rect, y);
+            Canvas.SetLeft(_rect, x);
+            Canvas.SetRight(_rect, y);
 
-            Holst.Children.Add(rect);
+            Holst.Children.Add(_rect);
         }
 
-        private Point startPoint;
-        private Rectangle rect;
+        private void SetBackground(string filename, UriKind kind = UriKind.Absolute)
+        {
+            var theImage = new BitmapImage
+                (new Uri(filename, kind));
+
+            var myImageBrush = new ImageBrush(theImage);
+
+            Holst.Background = myImageBrush;
+        }
+
+        #endregion
+
+        #region Canvas Events
 
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if(!_isBackgroundSet)
+                return;
 
-            startPoint = e.GetPosition(Holst);
+            _startPoint = e.GetPosition(Holst);
 
-            DrawRectangle(startPoint.X, startPoint.Y, 0, 0);
+            DrawRectangle(_startPoint.X, _startPoint.Y, 0, 0);
         }
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Released || rect == null)
+            if (e.LeftButton == MouseButtonState.Released || _rect == null)
                 return;
 
             var pos = e.GetPosition(Holst);
 
-            var x = Math.Min(pos.X, startPoint.X);
-            var y = Math.Min(pos.Y, startPoint.Y);
+            var x = Math.Min(pos.X, _startPoint.X);
+            var y = Math.Min(pos.Y, _startPoint.Y);
 
-            var w = Math.Max(pos.X, startPoint.X) - x;
-            var h = Math.Max(pos.Y, startPoint.Y) - y;
+            var w = Math.Max(pos.X, _startPoint.X) - x;
+            var h = Math.Max(pos.Y, _startPoint.Y) - y;
 
-            rect.Width = w;
-            rect.Height = h;
+            _rect.Width = w;
+            _rect.Height = h;
 
-            Canvas.SetLeft(rect, x);
-            Canvas.SetTop(rect, y);
+            Canvas.SetLeft(_rect, x);
+            Canvas.SetTop(_rect, y);
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
 //            rect = null;
         }
+
+        private void PreviewEtalonImage_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "Image Files (*.bmp, *.jpg)|*.bmp;*.jpg";
+            var result = dialog.ShowDialog();
+
+            if(result != true)
+                return;
+
+            if (!_isBackgroundSet)
+            {
+                DrawRectangle(0, 0, Holst.ActualWidth - 1, Holst.ActualHeight - 1);
+                _isBackgroundSet = true;
+            }
+
+            SetBackground(dialog.FileName);
+            EtalonFilePath = dialog.FileName;
+        }
+
+        #endregion
     }
 }
