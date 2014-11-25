@@ -6,6 +6,9 @@
              mc:Ignorable="d" 
              MouseDoubleClick="PreviewEtalonImage_OnMouseDoubleClick"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <BitmapImage x:Key="ElementBackgroundResource" UriSource="/Content/loadEtalonBgr.png" />
+    </UserControl.Resources>
     <Grid>
         <Canvas x:Name="Holst" 
                 MouseDown="Canvas_MouseDown" 
@@ -14,7 +17,7 @@
                 
                 >
             <Canvas.Background>
-                <ImageBrush ImageSource="/Content/loadEtalonBgr.png"
+                <ImageBrush ImageSource="{StaticResource ElementBackgroundResource}"
                             Stretch="Uniform"></ImageBrush>
             </Canvas.Background>
         </Canvas>

@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Practices.Prism.PubSubEvents;
 using Microsoft.Win32;
 
 namespace Hqub.Speckle.GUI.Controls
@@ -24,9 +17,10 @@ namespace Hqub.Speckle.GUI.Controls
     {
         #region Fields
 
-        private bool _isBackgroundSet = false;
+        private bool _isBackgroundSet;
         private Point _startPoint;
         private Rectangle _rect;
+        private IEventAggregator _eventAggregator;
 
         #endregion
 
@@ -35,6 +29,8 @@ namespace Hqub.Speckle.GUI.Controls
         public PreviewEtalonImage()
         {
             InitializeComponent();
+
+            SubsribeOnEvents();
         }
 
         #endregion
@@ -51,7 +47,30 @@ namespace Hqub.Speckle.GUI.Controls
 
         #endregion
 
-        #region Private methods
+        #region Private Methods
+
+        private void SubsribeOnEvents()
+        {
+            _eventAggregator = Events.AggregationEventService.Instance;
+
+            _eventAggregator.GetEvent<Events.ExperimentCreatedEvent>().Subscribe(OnExperimentCreated);
+        }
+
+        private void OnExperimentCreated(Model.Events.ExperimentCreateEventEntity args)
+        {
+            _isBackgroundSet = false;
+            _rect = null;
+
+            Holst.Children.Clear();
+
+            var bgr = new BitmapImage();
+            bgr.BeginInit();
+            
+            bgr.UriSource = new Uri("pack://application:,,,/Hqub.SpeckleStudio;component/Content/loadEtalonBgr.png");
+            bgr.EndInit();
+
+            Holst.Background = new ImageBrush(bgr) { Stretch = Stretch.Uniform };
+        }
 
         private void DrawRectangle(double x, double y, double width, double height)
         {

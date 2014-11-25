@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Hqub.Speckle.GUI</RootNamespace>
-    <AssemblyName>Hqub.Speckle.GUI</AssemblyName>
+    <AssemblyName>Hqub.SpeckleStudio</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -114,11 +114,13 @@
     <Compile Include="Controls\PreviewEtalonImage.xaml.cs">
       <DependentUpon>PreviewEtalonImage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Events\AggregationEventService.cs" />
     <Compile Include="Events\ExperimentCreatedEvent.cs" />
     <Compile Include="Experiment\IExperiment.cs" />
     <Compile Include="Experiment\SpeckleExperiment.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="ManagerModule.cs" />
+    <Compile Include="Model\Events\ExperimentCreateEventEntity.cs" />
     <Compile Include="Model\ProjectFile.cs" />
     <Compile Include="Model\ProjectFileAttributes\Etalon.cs" />
     <Compile Include="Model\ProjectFileAttributes\Photo.cs" />

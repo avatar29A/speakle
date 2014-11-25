@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Hqub.Speckle.GUI.View;
 using Microsoft.Practices.Prism.Modularity;
+using Microsoft.Practices.Prism.PubSubEvents;
 using Microsoft.Practices.Prism.UnityExtensions;
 using Microsoft.Practices.Unity;
 
@@ -65,7 +66,7 @@ namespace Hqub.Speckle.GUI
         private void ConfigureViewModelContainer()
         {
             Container.RegisterType(typeof(ViewModel.MainViewModel));
-            Container.RegisterType(typeof (ViewModel.Shell.ShellViewModel));
+            Container.RegisterType(typeof(ViewModel.Shell.ShellViewModel));
         }
 
         private void ConfigureOtherTypes()
@@ -76,6 +77,8 @@ namespace Hqub.Speckle.GUI
             // Correlation Engines
             Container.RegisterType(typeof (Core.Correlation.PHashCorrelationEngine), new InjectionProperty("Logger"));
             Container.RegisterType(typeof (Core.Correlation.SpegoCorrelationEngine), new InjectionProperty("Logger"));
+
+            Container.RegisterInstance(typeof (IEventAggregator), Events.AggregationEventService.Instance);
         }
     }
 }

@@ -2,7 +2,10 @@
 using System.Linq;
 using System.Windows.Input;
 using Hqub.Speckle.Core.Model;
+using Hqub.Speckle.GUI.Model.Events;
 using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.PubSubEvents;
+using Microsoft.Practices.Unity;
 using Microsoft.Win32;
 
 namespace Hqub.Speckle.GUI.ViewModel.Shell
@@ -14,6 +17,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         public ShellViewModel()
         {
             _experiment = Core.Experiment.Get();
+            EventAggregator = Events.AggregationEventService.Instance;
         }
 
         #region Properties
@@ -24,9 +28,11 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             set
             {
                 _experiment = value;
-                RaisePropertyChanged("Experiment");
+                OnPropertyChanged(() => Experiment);
             }
         }
+
+        public IEventAggregator EventAggregator { get; set; }
 
         #endregion
 
@@ -40,6 +46,10 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         private void CreateExpirementCommandExecute()
         {
             Experiment = Core.Experiment.Get(true);
+
+            // Рассылаем всем модуляем, что создали новый эксперимент:
+            var eventInstance = EventAggregator.GetEvent<Events.ExperimentCreatedEvent>();
+            eventInstance.Publish(new ExperimentCreateEventEntity());
         }
 
         public ICommand LoadExpirementFilesCommand
