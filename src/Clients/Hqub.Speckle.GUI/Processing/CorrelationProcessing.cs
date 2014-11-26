@@ -117,14 +117,13 @@ namespace Hqub.Speckle.GUI.Processing
             foreach (var image in images)
             {
                 var correlation = _engine.Compare(etalon.Path, image.Path);
-                System.Diagnostics.Debug.WriteLine("Correlation: {0} = {1}", image.Name, correlation);
-//                _eventAggregator.Publish(new CorrelationValue
-//                {
-//                    EtalonePath = etalon.Path,
-//                    ImageName = image.Name,
-//                    Time = DateTime.Now,
-//                    Value = correlation,
-//                });
+                _eventAggregator.Publish(new CorrelationValue
+                {
+                    EtalonePath = etalon.Path,
+                    ImageName = image.Name,
+                    Time = DateTime.Now,
+                    Value = correlation,
+                });
 
                 mre.Set();
             }
