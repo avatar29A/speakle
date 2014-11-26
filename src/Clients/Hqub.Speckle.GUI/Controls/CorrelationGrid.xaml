@@ -4,8 +4,47 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
+             x:Name="_this"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+    <Grid >
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+<!--        <ToolBar-->
+<!--                -->
+<!--                >-->
+<!--            <Button Height="24" Width="24" Content="E"/>-->
+<!--        </ToolBar>-->
+        
+            <DataGrid AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      ItemsSource="{Binding ElementName=_this, Path=Collections}"
+                      SelectedItem="{Binding ElementName=_this, Path=SelectedCorrelation, Mode=TwoWay}"
+                      Grid.Row="1"
+                      ScrollViewer.CanContentScroll="True" 
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      MouseDoubleClick="Control_OnMouseDoubleClick"
+                      ColumnWidth="*"
+                      >
+                <DataGrid.Columns>
+<!--                    <DataGridTextColumn Header="Дата"-->
+<!--                                        Binding="{Binding Time}"-->
+<!--                                        >-->
+<!--                        -->
+<!--                    </DataGridTextColumn>-->
+                    <DataGridTextColumn Header="Файл" 
+                                        Binding="{Binding ImageName}"
+                                        />
+                    <DataGridTextColumn Header="Корреляция"
+                                        Binding="{Binding Value}"
+                                        />
+                    <DataGridTextColumn Header="Путь до файла" 
+                                        Binding="{Binding ImagePath}"
+                                        />
+                </DataGrid.Columns>
+            </DataGrid>
     </Grid>
 </UserControl>

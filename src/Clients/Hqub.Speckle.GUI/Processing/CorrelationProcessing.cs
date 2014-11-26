@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using Hqub.Speckle.Core.Model;
+using Hqub.Speckle.GUI.Model.Events;
 using Microsoft.Practices.Prism.PubSubEvents;
 
 namespace Hqub.Speckle.GUI.Processing
@@ -13,7 +14,8 @@ namespace Hqub.Speckle.GUI.Processing
     public class CorrelationProcessing
     {
         private readonly Core.ICorrelationEngine _engine;
-        private Events.CorrelationCalculatedEvent _eventAggregator;
+        private readonly Events.CorrelationCalculatedEvent _calculateEvent;
+        private readonly Events.CorrelationCalculateCompleateEvent _calculateCompleateEvent;
         private readonly object _lock = new object();
         private Queue<ImageWrapper> _imageQueue;
 
@@ -29,14 +31,16 @@ namespace Hqub.Speckle.GUI.Processing
         public CorrelationProcessing(Core.ICorrelationEngine engine)
         {
             _engine = engine;
-            _eventAggregator = Events.AggregationEventService.Instance.GetEvent<Events.CorrelationCalculatedEvent>();
+            _calculateEvent = Events.AggregationEventService.Instance.GetEvent<Events.CorrelationCalculatedEvent>();
+            _calculateCompleateEvent =
+                Events.AggregationEventService.Instance.GetEvent<Events.CorrelationCalculateCompleateEvent>();
 
             InitThreadPool();
         }
 
         public void Start(ImageWrapper etalon, IList<ImageWrapper> images)
         {
-            BatchSize = images.Count/ThreadAmount;
+            BatchSize = CalcBatchSize(images.Count);
 
             ThreadPool.QueueUserWorkItem((arg) =>
             {
@@ -59,7 +63,16 @@ namespace Hqub.Speckle.GUI.Processing
 
                 } while (poolImages != null && poolImages.Count != 0);
 
+                _calculateCompleateEvent.Publish(new CorrelationCalculateCompleateEventEntity());
             });
+        }
+
+        private int CalcBatchSize(int count)
+        {
+            if (count <= ThreadAmount)
+                return count;
+
+            return count/ThreadAmount;
         }
 
         private void WaitAll(IEnumerable<ManualResetEventSlim> threads)
@@ -117,9 +130,10 @@ namespace Hqub.Speckle.GUI.Processing
             foreach (var image in images)
             {
                 var correlation = _engine.Compare(etalon.Path, image.Path);
-                _eventAggregator.Publish(new CorrelationValue
+                _calculateEvent.Publish(new CorrelationValue
                 {
                     EtalonePath = etalon.Path,
+                    ImagePath = image.Path,
                     ImageName = image.Name,
                     Time = DateTime.Now,
                     Value = correlation,

@@ -6,7 +6,7 @@ namespace Hqub.Speckle.Core.Model
     public class ImageWrapper : INotifyPropertyChanged
     {
         private string _name;
-        private bool _isChecked;
+        private bool _isChecked = true;
         private bool _isProcessed;
 
         public ImageWrapper(string filename)

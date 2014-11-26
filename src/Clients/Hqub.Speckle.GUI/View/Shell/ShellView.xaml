@@ -30,6 +30,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Menu>
@@ -150,6 +151,16 @@
                                                    ToolTip="Убрать выбор со всех элементов"
                                                    />
                                         </Button>
+                                        
+                                        <Separator/>
+
+                                        <Button Style="{StaticResource ToolbarButtonStyle}"
+                                                Command="{Binding ShowImageCommand}"
+                                                >
+                                            <Image Source="/Content/show.png"
+                                                   ToolTip="Просмотреть картинку"
+                                                   />
+                                        </Button>
                                     </ToolBar>
                                     <StatusBar DockPanel.Dock="Bottom">
                                         <TextBlock Text="{Binding Experiment.Images.Count, StringFormat={}Кол-во кадров: {0}}"></TextBlock>
@@ -157,6 +168,7 @@
                                     <ListBox
         		                        ItemsSource="{Binding Experiment.Images}"
         		                        ItemTemplate="{StaticResource imageTemplate}"
+                                        SelectedItem="{Binding SelectedImage, Mode=TwoWay}"
         		                        />
                                 </DockPanel>
                                 
@@ -170,10 +182,7 @@
                             <telerikDocking:RadPane Header="Значения корреляции"
                                                     CanUserClose="False"
                                                     >
-                                <ListBox
-        		                        ItemsSource="{Binding Images}"
-        		                        ItemTemplate="{StaticResource imageTemplate}"
-        		                        />
+                                <controls:CorrelationGrid/>
                             </telerikDocking:RadPane>
 
                         </telerikDocking:RadPaneGroup>
@@ -182,5 +191,38 @@
             </Grid>
            
         </Grid>
+
+        <StatusBar Grid.Row="3">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding LastProcessingFileName}"
+                               Margin="5,0,0,0"
+                               />
+                </StackPanel>
+            </StatusBarItem>
+           
+            
+            <StatusBarItem HorizontalAlignment="Right"
+                           Width="150"
+                           >
+                <StackPanel Orientation="Horizontal">
+                    <StatusBarItem>
+                        <TextBlock Text="{Binding ProgresStatusText}"/>
+                    </StatusBarItem>
+
+                    <StatusBarItem>
+                        <ProgressBar
+                            Minimum="0"
+                            Maximum="{Binding Experiment.ImageCount}"
+                            Value="{Binding ImageProcessingAmount}"
+                            Width="150"
+                            Height="30"
+                            />
+                    </StatusBarItem>
+                </StackPanel>
+                
+                
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </view:BaseUserControlView>

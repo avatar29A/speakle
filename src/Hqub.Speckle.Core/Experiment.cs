@@ -30,6 +30,18 @@ namespace Hqub.Speckle.Core
                 if (Equals(value, _images)) return;
                 _images = value;
                 OnPropertyChanged();
+                OnPropertyChanged("ImageCount");
+            }
+        }
+
+        public int ImageCount
+        {
+            get
+            {
+                if (_images == null)
+                    return 100;
+
+                return _images.Count;
             }
         }
 

@@ -17,11 +17,5 @@
                     regions:RegionManager.RegionName="{x:Static SpeckleStudio:RegionNames.MainRegionName}"
                     >
         </ContentControl>
-        
-        <StatusBar Grid.Row="1">
-            <StatusBarItem>
-                <Label>dsfdf</Label>
-            </StatusBarItem>
-        </StatusBar>
     </Grid>
 </view:BaseWindowView>

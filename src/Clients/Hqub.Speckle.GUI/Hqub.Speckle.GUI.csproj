@@ -115,6 +115,7 @@
       <DependentUpon>PreviewEtalonImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Events\AggregationEventService.cs" />
+    <Compile Include="Events\CorrelationCalculateCompleateEvent.cs" />
     <Compile Include="Events\CorrelationCalculatedEvent.cs" />
     <Compile Include="Events\EtalonLoadedEvent.cs" />
     <Compile Include="Events\ExperimentCreatedEvent.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Experiment\SpeckleExperiment.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="ManagerModule.cs" />
+    <Compile Include="Model\Events\CorrelationCalculateCompleateEventEntity.cs" />
     <Compile Include="Model\Events\ExperimentCreateEventEntity.cs" />
     <Compile Include="Model\ProjectFile.cs" />
     <Compile Include="Model\ProjectFileAttributes\Etalon.cs" />
@@ -133,6 +135,7 @@
     <Compile Include="Navigation\NavigationManager.cs" />
     <Compile Include="Processing\CorrelationProcessing.cs" />
     <Compile Include="RegionNames.cs" />
+    <Compile Include="Utitlities\ProccessHelper.cs" />
     <Compile Include="Utitlities\RegionManagerUtils.cs" />
     <Compile Include="ViewModel\BaseDialogViewModel .cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
@@ -198,6 +201,7 @@
     <Resource Include="Content\check_all.png" />
     <Resource Include="Content\folder.png" />
     <Resource Include="Content\uncheck_all.png" />
+    <Resource Include="Content\show.png" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -15,6 +16,10 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
     public class ShellViewModel : BaseViewModel
     {
         private Core.Experiment _experiment;
+        private ImageWrapper _selectedImage;
+        private int _imageProcessingAmount;
+        private object _lock = new object();
+        private string _lastProcessingFileName;
 
         public ShellViewModel()
         {
@@ -30,6 +35,9 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             var correlationCalcEvent = EventAggregator.GetEvent<Events.CorrelationCalculatedEvent>();
             correlationCalcEvent.Subscribe(OnValueCalcuted);
 
+            var correlationCalcCompleatedEvent = EventAggregator.GetEvent<Events.CorrelationCalculateCompleateEvent>();
+            correlationCalcCompleatedEvent.Subscribe(CalculateCorrelationCompleated);
+
             var etalonLoadedEvent = EventAggregator.GetEvent<Events.EtalonLoadedEvent>();
             etalonLoadedEvent.Subscribe(SetEtalon);
         }
@@ -37,6 +45,17 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         private void SetEtalon(ImageWrapper etalon)
         {
             Etalaon = etalon;
+        }
+
+        private void CalculateCorrelationCompleated(CorrelationCalculateCompleateEventEntity arg)
+        {
+//            MessageBox.Show("Рассчет закончен!");
+        }
+
+        private void ResetStatusBar()
+        {
+            LastProcessingFileName = string.Empty;
+            ImageProcessingAmount = 0;
         }
 
         #region Properties
@@ -55,6 +74,50 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
         public IEventAggregator EventAggregator { get; set; }
 
+        public ImageWrapper SelectedImage
+        {
+            get { return _selectedImage; }
+            set
+            {
+                _selectedImage = value;
+                OnPropertyChanged(() => SelectedImage);
+            }
+        }
+
+        /// <summary>
+        /// Кол-во обработанных кадров
+        /// </summary>
+        public int ImageProcessingAmount
+        {
+            get { return _imageProcessingAmount; }
+            set
+            {
+                _imageProcessingAmount = value;
+                OnPropertyChanged(() => ImageProcessingAmount);
+            }
+        }
+
+        public string LastProcessingFileName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_lastProcessingFileName))
+                    return string.Empty;
+
+                return string.Format("Обработан: {0}", _lastProcessingFileName);
+            }
+            set
+            {
+                _lastProcessingFileName = value;
+                OnPropertyChanged(() => LastProcessingFileName);
+            }
+        }
+
+        public string ProgresStatusText
+        {
+            get { return string.Format("{0} из {1}", ImageProcessingAmount, Experiment.ImageCount); }
+        }
+
         #endregion
 
         #region Commands
@@ -67,6 +130,8 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         private void CreateExpirementCommandExecute()
         {
             Experiment = Core.Experiment.Get(true);
+            SetEtalon(null);
+            ResetStatusBar();
 
             // Рассылаем всем модуляем, что создали новый эксперимент:
             var eventInstance = EventAggregator.GetEvent<Events.ExperimentCreatedEvent>();
@@ -115,20 +180,39 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
                         MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     LoadExpirementFilesExecute();
-                    return;
                 }
+
+                return;
             }
 
             // Запускаем анализ:
             var processing = new Processing.CorrelationProcessing(new SpegoCorrelationEngine());
-            processing.Start(Etalaon, Experiment.Images);
+            processing.Start(Etalaon, Experiment.Images.Where(x => x.IsChecked).ToList());
         }
+
 
         private void OnValueCalcuted(CorrelationValue val)
         {
-            System.Diagnostics.Debug.WriteLine("Correlation: {0} = {1}", val.ImageName, val.Value);
+            lock (_lock)
+            {
+                ++ImageProcessingAmount;
+                LastProcessingFileName = val.ImageName;
+                OnPropertyChanged(() => ProgresStatusText);
+            }
         }
 
+        public ICommand ShowImageCommand
+        {
+            get { return new DelegateCommand(ShowImageCommandExecute); }
+        }
+
+        private void ShowImageCommandExecute()
+        {
+            if(SelectedImage == null)
+                return;
+
+            Process.Start(SelectedImage.Path);
+        }
 
         #region Checked Unchecked commands
 
