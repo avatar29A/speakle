@@ -17,7 +17,7 @@ namespace Hqub.Speckle.Core
 
         private Experiment()
         {
-
+            
         }
 
         #region Public Properties

@@ -77,9 +77,8 @@
 
                 <Button 
                     Style="{StaticResource ToolbarButtonStyle}"
-            		Command="{Binding StartExperimentCommand}"
+            		Command="{Binding RunAnalysingCommand}"
             		ToolTip="Запустить эксперимент"
-                    IsEnabled="False"
                  >
                     <Image Source="/Content/play.png"/>
                 </Button>
@@ -88,9 +87,9 @@
 
                 <Button 
                     Style="{StaticResource ToolbarButtonStyle}"
-            		Command="{Binding StartExperimentCommand}"
+            		Command="{Binding RunAnalysingCommand}"
             		ToolTip="Видео"
-                    IsEnabled="False"
+                    
                  >
                     <Image Source="/Content/video.png"/>
                 </Button>

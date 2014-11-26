@@ -115,6 +115,8 @@
       <DependentUpon>PreviewEtalonImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Events\AggregationEventService.cs" />
+    <Compile Include="Events\CorrelationCalculatedEvent.cs" />
+    <Compile Include="Events\EtalonLoadedEvent.cs" />
     <Compile Include="Events\ExperimentCreatedEvent.cs" />
     <Compile Include="Experiment\IExperiment.cs" />
     <Compile Include="Experiment\SpeckleExperiment.cs" />
@@ -129,6 +131,7 @@
     <Compile Include="Modules\BaseNavigationModule .cs" />
     <Compile Include="Modules\ShellModule.cs" />
     <Compile Include="Navigation\NavigationManager.cs" />
+    <Compile Include="Processing\CorrelationProcessing.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="Utitlities\RegionManagerUtils.cs" />
     <Compile Include="ViewModel\BaseDialogViewModel .cs" />

@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Hqub.Speckle.Core.Model;
 using Microsoft.Practices.Prism.PubSubEvents;
 using Microsoft.Win32;
 
@@ -156,6 +157,16 @@ namespace Hqub.Speckle.GUI.Controls
 
             SetBackground(dialog.FileName);
             EtalonFilePath = dialog.FileName;
+
+            // Уведомляем всех подписчиков, что загрузили новый эталон:
+            var customEvent = _eventAggregator.GetEvent<Events.EtalonLoadedEvent>();
+            customEvent.Publish(new ImageWrapper
+            {
+                Name = System.IO.Path.GetFileName(EtalonFilePath),
+                Path = EtalonFilePath,
+                Correlation = new CorrelationValue()
+
+            });
         }
 
         #endregion

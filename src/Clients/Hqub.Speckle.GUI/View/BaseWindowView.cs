@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,12 @@ namespace Hqub.Speckle.GUI.View
     {
         public BaseWindowView(BaseViewModel viewModel)
         {
+            if (DesignerProperties.GetIsInDesignMode(this))
+            {
+                return;
+                // Design-mode specific functionality
+            }
+
             ViewModel = viewModel;
 
             Loaded += (loadedSender, loadedArgs) => viewModel.LoadCommand.Execute(loadedArgs);
