@@ -43,11 +43,12 @@
                       ColumnWidth="*"
                       >
                 <DataGrid.Columns>
-<!--                    <DataGridTextColumn Header="Дата"-->
-<!--                                        Binding="{Binding Time}"-->
-<!--                                        >-->
-<!--                        -->
-<!--                    </DataGridTextColumn>-->
+                    <DataGridTextColumn Header="Дата"
+                                        Width="Auto"
+                                        Binding="{Binding Time, StringFormat={}{0:hh:mm:ss}}"
+                                        >
+                        
+                    </DataGridTextColumn>
                     <DataGridTextColumn Header="Файл" 
                                         Binding="{Binding ImageName}"
                                         />

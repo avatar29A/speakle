@@ -3,6 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace Hqub.Speckle.Core.Model
 {
+    using System.Text.RegularExpressions;
+
     public class ImageWrapper : INotifyPropertyChanged
     {
         private string _name;
@@ -52,6 +54,22 @@ namespace Hqub.Speckle.Core.Model
             {
                 _isProcessed = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public int Number
+        {
+            get
+            {
+                var regValue = Regex.Match(Name, "[0-9]{6}");
+
+                var val = 0;
+                if (string.IsNullOrEmpty(regValue.Value) || int.TryParse(regValue.Value, out val))
+                {
+                    return val;
+                }
+
+                return val;
             }
         }
 

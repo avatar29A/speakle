@@ -121,6 +121,8 @@ namespace Hqub.Speckle.GUI.Processing
 
         private void Process(ImageWrapper etalon, List<ImageWrapper> images, ManualResetEventSlim mre)
         {
+            var experiment = Core.Experiment.Get();
+
             if (images == null || images.Count == 0)
             {
                 mre.Set();
@@ -135,7 +137,7 @@ namespace Hqub.Speckle.GUI.Processing
                     EtalonePath = etalon.Path,
                     ImagePath = image.Path,
                     ImageName = image.Name,
-                    Time = DateTime.Now,
+                    Time = experiment.StartExperiment.AddSeconds(experiment.Period * image.Number),
                     Value = correlation,
                 });
 
