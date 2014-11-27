@@ -10,6 +10,12 @@ using JetBrains.Annotations;
 
 namespace Hqub.Speckle.GUI.Controls
 {
+    using System.Text;
+
+    using Microsoft.Win32;
+
+    using Telerik.Windows.Controls;
+
     /// <summary>
     /// Interaction logic for CorrelationGrid.xaml
     /// </summary>
@@ -62,6 +68,47 @@ namespace Hqub.Speckle.GUI.Controls
             Collections.Refresh();
         }
 
+        #region Command
+
+        public ICommand ExportCsvCommand
+        {
+            get
+            {
+                return new DelegateCommand(ExportCsvCommandExecute);
+            }
+        }
+
+        private void ExportCsvCommandExecute(object obj)
+        {
+            var dialog = new SaveFileDialog();
+            dialog.Filter = "CSV Files (*.csv)|*.csv";
+            dialog.FileName = "experiment.csv";
+
+            dialog.FileOk += this.DialogFileOk;
+
+            dialog.ShowDialog();
+        }
+
+        private void DialogFileOk(object sender, CancelEventArgs e)
+        {
+            var dialog = (SaveFileDialog)sender;
+
+            using (var file = System.IO.File.OpenWrite(dialog.FileName))
+            {
+                foreach (var correlationValue in CorrelationValues)
+                {
+                    var line = string.Format("{0};{1}\n", correlationValue.ImageName, correlationValue.Value);
+                    var bline = Encoding.UTF8.GetBytes(line);
+
+                    file.Write(bline, 0, bline.Length);
+                }
+
+                file.Close();
+            }
+        }
+
+        #endregion
+
         #region Properties
 
         public List<CorrelationValue> CorrelationValues
@@ -95,7 +142,6 @@ namespace Hqub.Speckle.GUI.Controls
         }
 
         #endregion
-
 
         #region OnPropertyChanged
 

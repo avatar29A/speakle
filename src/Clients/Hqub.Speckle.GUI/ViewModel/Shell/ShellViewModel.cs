@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -145,7 +144,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
         private void LoadExpirementFilesExecute()
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
+            var fileDialog = new OpenFileDialog();
             fileDialog.Multiselect = true;
             fileDialog.Filter = "Image Files (*.bmp, *.jpg)|*.bmp;*.jpg|All Files (*.*)|*.*";
             var result = fileDialog.ShowDialog();
@@ -193,12 +192,9 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
         private void OnValueCalcuted(CorrelationValue val)
         {
-            lock (_lock)
-            {
-                ++ImageProcessingAmount;
-                LastProcessingFileName = val.ImageName;
-                OnPropertyChanged(() => ProgresStatusText);
-            }
+            ++ImageProcessingAmount;
+            LastProcessingFileName = val.ImageName;
+            OnPropertyChanged(() => ProgresStatusText);
         }
 
         public ICommand ShowImageCommand

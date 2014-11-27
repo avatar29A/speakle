@@ -8,6 +8,7 @@ using System.Windows;
 
 namespace Hqub.Speckle.GUI
 {
+    using System.Windows.Navigation;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -26,6 +27,12 @@ namespace Hqub.Speckle.GUI
 
                     dispatcherUnhandled.Handled = true;
                 };
+
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
 
             _bootstrap.Run(true);
         }

@@ -1,0 +1,28 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" x:Class="Hqub.Speckle.GUI.Controls.ChartControl" 
+             mc:Ignorable="d" 
+            x:Name="_this"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <telerik:RadChart ItemsSource="{Binding ElementName=_this, Path=Values}"
+                          x:Name="radChart"
+                          >
+            <telerik:RadChart.SeriesMappings >
+                <telerik:SeriesMapping LegendLabel="Корреляция">
+                    <telerik:SeriesMapping.SeriesDefinition>
+                        <telerik:SplineSeriesDefinition/>
+                    </telerik:SeriesMapping.SeriesDefinition>
+
+                    <telerik:SeriesMapping.ItemMappings>
+                        <telerik:ItemMapping DataPointMember="XValue" FieldName="Time"/>
+                        <telerik:ItemMapping DataPointMember="YValue" FieldName="Value"/>
+                    </telerik:SeriesMapping.ItemMappings>
+                </telerik:SeriesMapping>
+            </telerik:RadChart.SeriesMappings>
+        </telerik:RadChart>
+    </Grid>
+</UserControl>

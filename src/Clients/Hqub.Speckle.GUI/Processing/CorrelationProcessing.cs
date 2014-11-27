@@ -21,7 +21,7 @@ namespace Hqub.Speckle.GUI.Processing
 
         #region Theading
 
-        private const int ThreadAmount = 5;
+        private const int ThreadAmount = 1;
         private int BatchSize = 0;
 
         private List<ManualResetEventSlim> _lockThreads = new List<ManualResetEventSlim>();

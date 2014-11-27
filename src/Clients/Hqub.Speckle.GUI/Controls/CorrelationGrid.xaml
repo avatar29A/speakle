@@ -6,6 +6,12 @@
              mc:Ignorable="d" 
              x:Name="_this"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="ToolbarButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="36"/>
+            <Setter Property="Height" Value="36"/>
+        </Style>
+    </UserControl.Resources>
     <Grid >
         
         <Grid.RowDefinitions>
@@ -13,11 +19,18 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-<!--        <ToolBar-->
-<!--                -->
-<!--                >-->
-<!--            <Button Height="24" Width="24" Content="E"/>-->
-<!--        </ToolBar>-->
+        <ToolBar
+                Background="White"
+                >
+            <Button Style="{StaticResource ToolbarButtonStyle}"
+                    Command="{Binding ElementName=_this, Path=ExportCsvCommand}"
+                    ToolTip="Экспорт в csv"
+                    >
+                <Image
+                    Source="/Content/csv.png"
+                    />
+            </Button>
+        </ToolBar>
         
             <DataGrid AutoGenerateColumns="False"
                       IsReadOnly="True"

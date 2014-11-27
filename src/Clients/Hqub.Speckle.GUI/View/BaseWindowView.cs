@@ -20,7 +20,7 @@ namespace Hqub.Speckle.GUI.View
                 // Design-mode specific functionality
             }
 
-            ViewModel = viewModel;
+            this.ViewModel = viewModel;
 
             Loaded += (loadedSender, loadedArgs) => viewModel.LoadCommand.Execute(loadedArgs);
             Closing += (closingSender, closingArgs) => viewModel.ClosingCommand.Execute(closingArgs);

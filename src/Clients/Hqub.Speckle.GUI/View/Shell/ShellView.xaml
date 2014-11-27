@@ -10,11 +10,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
     <view:BaseUserControlView.Resources>
+
         <Style x:Key="ToolbarButtonStyle" TargetType="Button">
             <Setter Property="Width" Value="36"/>
             <Setter Property="Height" Value="36"/>
         </Style>
-        
+
         <DataTemplate x:Key="imageTemplate">
             <StackPanel Orientation="Horizontal">
                 <CheckBox Content="{Binding Name}"
@@ -113,15 +114,14 @@
                             <telerikDocking:RadPaneGroup x:Name="Workarea">
                                 <telerikDocking:RadPane Header="Рабочая область"
                                                         CanUserClose="False">
+                                    <controls:ChartControl/>
                                 </telerikDocking:RadPane>
                                 
                             </telerikDocking:RadPaneGroup>
                             
                             <telerikDocking:RadPaneGroup>
                                 <telerikDocking:RadPane Header="Эталон"
-                                                    CanUserClose="False"
-                                                
-                                                    >
+                                                    CanUserClose="False">
                                     <controls:PreviewEtalonImage/>
                                 </telerikDocking:RadPane>
                             </telerikDocking:RadPaneGroup>
