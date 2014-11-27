@@ -44,7 +44,7 @@
             <telerik:RadChart.SeriesMappings >
                 <telerik:SeriesMapping LegendLabel="Корреляция">
                     <telerik:SeriesMapping.SeriesDefinition>
-                        <telerik:SplineSeriesDefinition ShowItemLabels="False" ShowItemToolTips="True"/>
+                        <telerik:SplineSeriesDefinition ShowItemLabels="False" ShowItemToolTips="True" ShowPointMarks="False"/>
                     </telerik:SeriesMapping.SeriesDefinition>
 
                     <telerik:SeriesMapping.ItemMappings>
@@ -64,11 +64,12 @@
                                                ></telerik:AxisX>
                             </telerik:ChartArea.AxisX>
 
-<!--                            <telerik:ChartArea.AxisY>-->
-<!--                                <telerik:AxisY -->
-<!--                                               IsLogarithmic="True"-->
-<!--                                               ></telerik:AxisY>-->
-<!--                            </telerik:ChartArea.AxisY>-->
+                            <telerik:ChartArea.AxisY>
+                                <telerik:AxisY 
+                                                MinValue="0"
+                                                
+                                               ></telerik:AxisY>
+                            </telerik:ChartArea.AxisY>
                         </telerik:ChartArea>
                     </telerik:ChartDefaultView.ChartArea>
 

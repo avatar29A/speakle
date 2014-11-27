@@ -12,18 +12,46 @@ using Microsoft.Win32;
 
 namespace Hqub.Speckle.GUI.ViewModel.Shell
 {
+    using System;
+    using System.CodeDom;
+    using System.Collections.Generic;
+
+    using Hqub.Speckle.Core;
+
+    using Microsoft.Practices.ServiceLocation;
+
     public class ShellViewModel : BaseViewModel
     {
         private Core.Experiment _experiment;
         private ImageWrapper _selectedImage;
         private int _imageProcessingAmount;
-        private object _lock = new object();
         private string _lastProcessingFileName;
+
+        private string _selectedCorrelationEngine = StaticVariable.SpegoAlgCode;
+
+        private Dictionary<string, Type> _engines;
+
+        private bool isSpegoAlgChecked;
+
+        private bool isPHashChecked;
 
         public ShellViewModel()
         {
-            _experiment = Core.Experiment.Get();
+            _experiment = Experiment.Get();
             EventAggregator = Events.AggregationEventService.Instance;
+            IsSpegoAlgChecked = true;
+
+            _engines = new Dictionary<string, Type>
+                           {
+                               {
+                                   StaticVariable.PHashAlgCode,
+                                   typeof(PHashCorrelationEngine)
+                               },
+                               {
+                                   StaticVariable.SpegoAlgCode,
+                                   typeof(SpegoCorrelationEngine)
+                               }
+                           };
 
             // Подписываемся на событие обработки:
             SubsribeOnEvents();
@@ -117,6 +145,42 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             get { return string.Format("{0} из {1}", ImageProcessingAmount, Experiment.ImageCount); }
         }
 
+        public bool IsSpegoAlgChecked
+        {
+            get
+            {
+                return this.isSpegoAlgChecked;
+            }
+            set
+            {
+                this.isSpegoAlgChecked = value;
+                this.isPHashChecked = !value;
+
+                this.RaiseMenuItems();
+            }
+        }
+
+        public bool IsPHashChecked
+        {
+            get
+            {
+                return this.isPHashChecked;
+            }
+            set
+            {
+                this.isPHashChecked = value;
+                this.isSpegoAlgChecked = !value;
+
+                this.RaiseMenuItems();
+            }
+        }
+
+        private void RaiseMenuItems()
+        {
+            OnPropertyChanged(() => IsPHashChecked);
+            OnPropertyChanged(() => IsSpegoAlgChecked);
+        }
+
         #endregion
 
         #region Commands
@@ -165,18 +229,22 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         {
             if (Etalaon == null)
             {
-                MessageBox.Show("Для начала анализа требуется загрузить эталонной кадр.", "Эталон не загружен",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    "Для начала анализа требуется загрузить эталонной кадр.",
+                    "Эталон не загружен",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
 
                 return;
             }
 
             if (Experiment.Images == null || Experiment.Images.Count == 0)
             {
-                if (
-                    MessageBox.Show("Для проведения анализа требуется загрузить кадры. Желаете загрузить сейчас?",
-                        "Загрузка кадров",
-                        MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (MessageBox.Show(
+                    "Для проведения анализа требуется загрузить кадры. Желаете загрузить сейчас?",
+                    "Загрузка кадров",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     LoadExpirementFilesExecute();
                 }
@@ -184,9 +252,16 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
                 return;
             }
 
+
+            EventAggregator.GetEvent<Events.StartNewAnalysisEvent>().Publish(new object());
+
             // Запускаем анализ:
-            var processing = new Processing.CorrelationProcessing(new SpegoCorrelationEngine());
+            var processing =
+                new Processing.CorrelationProcessing(
+                    (ICorrelationEngine)ServiceLocator.Current.GetInstance(_engines[_selectedCorrelationEngine]));
             processing.Start(Etalaon, Experiment.Images.Where(x => x.IsChecked).ToList());
+
+            this.ResetStatusBar();
         }
 
 
@@ -200,6 +275,31 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         public ICommand ShowImageCommand
         {
             get { return new DelegateCommand(ShowImageCommandExecute); }
+        }
+
+        public ICommand SelectAlgoritmCommand
+        {
+            get
+            {
+                return new Telerik.Windows.Controls.DelegateCommand(SelectAlgoritmCommandExecute);
+            }
+        }
+
+        private void SelectAlgoritmCommandExecute(object e)
+        {
+            var alg = (string)e;
+            _selectedCorrelationEngine = alg;
+
+            switch (alg)
+            {
+                case Core.StaticVariable.PHashAlgCode:
+                    IsPHashChecked = true;
+                    break;
+
+                case Core.StaticVariable.SpegoAlgCode:
+                     IsSpegoAlgChecked = true;
+                    break;
+            }
         }
 
         private void ShowImageCommandExecute()

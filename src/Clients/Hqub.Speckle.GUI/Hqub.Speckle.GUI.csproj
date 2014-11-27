@@ -126,6 +126,7 @@
     <Compile Include="Events\CorrelationCalculatedEvent.cs" />
     <Compile Include="Events\EtalonLoadedEvent.cs" />
     <Compile Include="Events\ExperimentCreatedEvent.cs" />
+    <Compile Include="Events\StartNewAnalysisEvent.cs" />
     <Compile Include="Experiment\IExperiment.cs" />
     <Compile Include="Experiment\SpeckleExperiment.cs" />
     <Compile Include="Logger.cs" />

@@ -37,6 +37,7 @@ namespace Hqub.Speckle.GUI.Controls
             
             Values = new ObservableCollection<CorrelationValue>();
             _correlationValues = new List<CorrelationValue>();
+
             SubsribeOnEvents();
         }
 
@@ -82,7 +83,7 @@ namespace Hqub.Speckle.GUI.Controls
 
         #region Properties
 
-        public ObservableCollection<Core.Model.CorrelationValue> Values
+        public ObservableCollection<CorrelationValue> Values
         {
             get
             {
@@ -101,10 +102,29 @@ namespace Hqub.Speckle.GUI.Controls
         {
             var correlationEvent = _eventAggregator.GetEvent<Events.CorrelationCalculatedEvent>();
             correlationEvent.Subscribe(OnCalculatedCorrelationEvent);
+
+            var startAnalising = _eventAggregator.GetEvent<Events.StartNewAnalysisEvent>();
+            startAnalising.Subscribe(this.OnStartAnalising);
+
+            var compleate = _eventAggregator.GetEvent<Events.CorrelationCalculateCompleateEvent>();
+            compleate.Subscribe(this.OnCompleate);
         }
 
-        private int _counter = 0;
-        private void OnCalculatedCorrelationEvent(Core.Model.CorrelationValue val)
+        private void OnStartAnalising(object args)
+        {
+            Values.Clear();
+            _correlationValues.Clear();
+            _correlationValues.Add(new CorrelationValue { Value = 0, Time = Core.Experiment.Get().StartExperiment });
+            _correlationValues.Add(new CorrelationValue { Value = 2, Time = Core.Experiment.Get().StartExperiment });
+        }
+
+        private void OnCompleate(object e)
+        {
+            Values = new ObservableCollection<CorrelationValue>(_correlationValues.OrderBy(x => x.Time));
+        }
+
+        private int _counter;
+        private void OnCalculatedCorrelationEvent(CorrelationValue val)
         {
             this.Dispatcher.Invoke(
                 () =>

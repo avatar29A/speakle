@@ -44,6 +44,9 @@ namespace Hqub.Speckle.GUI.Controls
             var experimentCreateEvent =
                 Events.AggregationEventService.Instance.GetEvent<Events.ExperimentCreatedEvent>();
 
+            var startAnalising = Events.AggregationEventService.Instance.GetEvent<Events.StartNewAnalysisEvent>();
+            startAnalising.Subscribe(this.OnStartAnalising);
+
             experimentCreateEvent.Subscribe(OnExperimentCreate);
         }
 
@@ -66,6 +69,11 @@ namespace Hqub.Speckle.GUI.Controls
             SelectedCorrelation = null;
             CorrelationValues.Clear();
             Collections.Refresh();
+        }
+
+        private void OnStartAnalising(object args)
+        {
+            this.Reset();
         }
 
         #region Command
