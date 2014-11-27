@@ -76,8 +76,6 @@ namespace Hqub.Speckle.GUI.Controls
             fileStream.Close();
         }
 
-
-
         #endregion
 
         #endregion

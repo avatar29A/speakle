@@ -89,7 +89,7 @@
 
                 <Button 
                     Style="{StaticResource ToolbarButtonStyle}"
-            		Command="{Binding RunAnalysingCommand}"
+            		IsEnabled="False"
             		ToolTip="Видео"
                     
                  >
