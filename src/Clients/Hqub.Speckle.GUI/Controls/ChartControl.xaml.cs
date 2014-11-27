@@ -5,11 +5,18 @@ namespace Hqub.Speckle.GUI.Controls
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.IO;
+    using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Windows;
+    using System.Windows.Input;
+    using System.Windows.Media.Imaging;
 
     using Hqub.Speckle.Core.Model;
     using Microsoft.Practices.Prism.PubSubEvents;
+    using Microsoft.Win32;
+
+    using Telerik.Windows.Controls;
 
     /// <summary>
     /// Interaction logic for ChartControl.xaml
@@ -32,6 +39,48 @@ namespace Hqub.Speckle.GUI.Controls
             _correlationValues = new List<CorrelationValue>();
             SubsribeOnEvents();
         }
+
+        #region Commands
+
+        #region Export Chart Commadns
+
+        public ICommand ExportXlsCommand
+        {
+            get { return new DelegateCommand(ExportXlsCommandExecute); }
+        }
+
+        private void ExportXlsCommandExecute(object obj)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.DefaultExt = "*.xls";
+            dialog.Filter = "Files(*.xls)|*.xls";
+            if (!(bool)dialog.ShowDialog()) return;
+            Stream fileStream = dialog.OpenFile();
+            radChart.ExportToExcelML(fileStream);
+            fileStream.Close();
+        }
+
+        public ICommand ExportPngCommand
+        {
+            get { return new DelegateCommand(ExportPngCommandExecute); }
+        }
+
+        private void ExportPngCommandExecute(object obj)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.DefaultExt = "*.png";
+            dialog.Filter = "Files(*.png)|*.png";
+            if (!(bool)dialog.ShowDialog()) return;
+            Stream fileStream = dialog.OpenFile();
+            radChart.ExportToImage(fileStream, new PngBitmapEncoder());
+            fileStream.Close();
+        }
+
+
+
+        #endregion
+
+        #endregion
 
         #region Properties
 
@@ -68,7 +117,7 @@ namespace Hqub.Speckle.GUI.Controls
                         if (_counter % 10 == 0)
                         {
                             _counter = 0;
-                            Values = new ObservableCollection<CorrelationValue>(_correlationValues);
+                            Values = new ObservableCollection<CorrelationValue>(_correlationValues.OrderBy(x => x.Time));
                         }
                     });
         }

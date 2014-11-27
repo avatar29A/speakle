@@ -10,13 +10,41 @@
             x:Name="_this"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <ToolBar Background="White">
+            <Button Width="36"
+                    Height="36"
+                    Command="{Binding ElementName=_this, Path=ExportXlsCommand}"
+                    ToolTip="Экспорт в xls"
+                    >
+                <Image
+                    Source="/Content/excel.png"
+                    />
+            </Button>
+
+            <Button Width="36"
+                    Height="36"
+                    Command="{Binding ElementName=_this, Path=ExportPngCommand}"
+                    ToolTip="Экспорт в png"
+                    >
+                <Image
+                    Source="/Content/png.png"
+                    />
+            </Button>
+        </ToolBar>
+        
         <telerik:RadChart ItemsSource="{Binding ElementName=_this, Path=Values}"
                           x:Name="radChart"
+                          Grid.Row="1"
                           >
             <telerik:RadChart.SeriesMappings >
                 <telerik:SeriesMapping LegendLabel="Корреляция">
                     <telerik:SeriesMapping.SeriesDefinition>
-                        <telerik:SplineSeriesDefinition />
+                        <telerik:SplineSeriesDefinition ShowItemLabels="False" ShowItemToolTips="True"/>
                     </telerik:SeriesMapping.SeriesDefinition>
 
                     <telerik:SeriesMapping.ItemMappings>
@@ -28,15 +56,19 @@
             <telerik:RadChart.DefaultView>
                 <telerik:ChartDefaultView>
                     <telerik:ChartDefaultView.ChartArea>
-                        <telerik:ChartArea>
+                        <telerik:ChartArea NoDataString="Нет данных для построения графика">
                             <telerik:ChartArea.AxisX>
                                 <telerik:AxisX IsDateTime="True"
-                                              
                                                DefaultLabelFormat="hh:mm:ss"
-                                               
                                                LabelRotationAngle="45"
                                                ></telerik:AxisX>
                             </telerik:ChartArea.AxisX>
+
+<!--                            <telerik:ChartArea.AxisY>-->
+<!--                                <telerik:AxisY -->
+<!--                                               IsLogarithmic="True"-->
+<!--                                               ></telerik:AxisY>-->
+<!--                            </telerik:ChartArea.AxisY>-->
                         </telerik:ChartArea>
                     </telerik:ChartDefaultView.ChartArea>
 

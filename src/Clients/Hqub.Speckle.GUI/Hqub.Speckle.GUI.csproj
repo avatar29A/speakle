@@ -211,6 +211,8 @@
     <Resource Include="Content\uncheck_all.png" />
     <Resource Include="Content\show.png" />
     <Resource Include="Content\csv.png" />
+    <Resource Include="Content\excel.png" />
+    <Resource Include="Content\png.png" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
