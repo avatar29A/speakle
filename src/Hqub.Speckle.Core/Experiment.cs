@@ -8,6 +8,8 @@ using Hqub.Speckle.Core.Model;
 
 namespace Hqub.Speckle.Core
 {
+    using System.Drawing;
+
     public class Experiment : IExperiment, INotifyPropertyChanged
     {
         private ObservableCollection<ImageWrapper> _images;
@@ -42,6 +44,11 @@ namespace Hqub.Speckle.Core
                 return _images.Count;
             }
         }
+
+        /// <summary>
+        /// Область сравнения изображений
+        /// </summary>
+        public Rectangle WorkAreay { get; set; }
 
         public DateTime StartExperiment { get; set; }
         public int Period { get; set; }

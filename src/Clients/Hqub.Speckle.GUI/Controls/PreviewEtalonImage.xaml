@@ -5,21 +5,56 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              MouseDoubleClick="PreviewEtalonImage_OnMouseDoubleClick"
+             x:Name="_this"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <BitmapImage x:Key="ElementBackgroundResource" UriSource="/Content/loadEtalonBgr.png" />
+        <Thickness x:Key="MarginRight5">0,0,5,0</Thickness>
     </UserControl.Resources>
     <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
         <Canvas x:Name="Holst" 
                 MouseDown="Canvas_MouseDown" 
                 MouseMove="Canvas_MouseMove"
                 MouseUp="Canvas_MouseUp"
-                
+                ClipToBounds="True"
                 >
             <Canvas.Background>
                 <ImageBrush ImageSource="{StaticResource ElementBackgroundResource}"
-                            Stretch="Uniform"></ImageBrush>
+                            Stretch="Uniform">
+                </ImageBrush>
             </Canvas.Background>
         </Canvas>
+
+        <StatusBar Grid.Row="1">
+            <DockPanel LastChildFill="False">
+                <TextBlock Margin="{StaticResource MarginRight5}"
+                           DockPanel.Dock="Right"
+                           >
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="Мышь: {0},{1}">
+                            <Binding ElementName="_this" Path="MouseX"/>
+                            <Binding ElementName="_this" Path="MouseY"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="Выбранная область: {0},{1},{2},{3}">
+                            <Binding ElementName="_this" Path="Workarea.X"/>
+                            <Binding ElementName="_this" Path="Workarea.Y"/>
+                            <Binding ElementName="_this" Path="Workarea.Width"/>
+                            <Binding ElementName="_this" Path="Workarea.Height"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </DockPanel>
+        </StatusBar>
     </Grid>
 </UserControl>

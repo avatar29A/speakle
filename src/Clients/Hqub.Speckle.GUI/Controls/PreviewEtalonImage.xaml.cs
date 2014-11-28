@@ -11,10 +11,15 @@ using Microsoft.Win32;
 
 namespace Hqub.Speckle.GUI.Controls
 {
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+
+    using JetBrains.Annotations;
+
     /// <summary>
     /// Interaction logic for PreviewEtalonImage.xaml
     /// </summary>
-    public partial class PreviewEtalonImage : UserControl
+    public partial class PreviewEtalonImage : UserControl, INotifyPropertyChanged
     {
         #region Fields
 
@@ -22,6 +27,12 @@ namespace Hqub.Speckle.GUI.Controls
         private Point _startPoint;
         private Rectangle _rect;
         private IEventAggregator _eventAggregator;
+
+        private double mouseX;
+
+        private double mouseY;
+
+        private System.Drawing.Rectangle workarea;
 
         #endregion
 
@@ -32,6 +43,26 @@ namespace Hqub.Speckle.GUI.Controls
             InitializeComponent();
 
             SubsribeOnEvents();
+
+         Holst.SizeChanged += Holst_SizeChanged;
+        }
+
+        private void Holst_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var deltaHeight = Math.Abs(e.NewSize.Height - e.PreviousSize.Height);
+            var deltaWidth = Math.Abs(e.NewSize.Width - e.PreviousSize.Width);
+
+            var percentChangeWidth = deltaWidth / e.PreviousSize.Width;
+            var precentChangeHeight = deltaHeight / e.PreviousSize.Height;
+
+            var rectWidth = 0;
+            var rectHeight = 0;
+
+        }
+
+        private int GetSign(double oldValue, double newValue)
+        {
+            return oldValue <= newValue ? 1 : -1;
         }
 
         #endregion
@@ -40,11 +71,58 @@ namespace Hqub.Speckle.GUI.Controls
 
         public string EtalonFilePath { get; set; }
 
-        public Rectangle Workarea
+        public System.Drawing.Rectangle Workarea
         {
-            get { return _rect; }
-            set { _rect = value; }
-        } 
+            get
+            {
+                return this.workarea;
+            }
+            set
+            {
+                this.workarea = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public Size OriginalSize { get; set; }
+
+        public string ImageInfo
+        {
+            get
+            {
+                return string.Format("Image: X={2}; Y={3}; W={0}; H={1};", Holst.Width, Holst.Height);
+            }
+        }
+
+        #region Mouse XY
+
+        public double MouseX
+        {
+            get
+            {
+                return this.mouseX;
+            }
+            set
+            {
+                this.mouseX = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public double MouseY
+        {
+            get
+            {
+                return this.mouseY;
+            }
+            set
+            {
+                this.mouseY = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -95,10 +173,20 @@ namespace Hqub.Speckle.GUI.Controls
         {
             var theImage = new BitmapImage
                 (new Uri(filename, kind));
+            
+            OriginalSize = new Size(theImage.Width, theImage.Height);
 
             var myImageBrush = new ImageBrush(theImage);
+            myImageBrush.Stretch = Stretch.None;
 
             Holst.Background = myImageBrush;
+            Holst.Width = OriginalSize.Width;
+            Holst.Height = OriginalSize.Height;
+
+            Workarea = new System.Drawing.Rectangle(0,0, (int)OriginalSize.Width, (int)OriginalSize.Height);
+            Core.Experiment.Get().WorkAreay = Workarea;
+
+            this.Background = Brushes.Black;
         }
 
         #endregion
@@ -109,7 +197,7 @@ namespace Hqub.Speckle.GUI.Controls
         {
             if(!_isBackgroundSet)
                 return;
-
+             
             _startPoint = e.GetPosition(Holst);
 
             DrawRectangle(_startPoint.X, _startPoint.Y, 0, 0);
@@ -117,10 +205,15 @@ namespace Hqub.Speckle.GUI.Controls
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Released || _rect == null)
+            if (!_isBackgroundSet)
                 return;
 
             var pos = e.GetPosition(Holst);
+            MouseX = pos.X;
+            MouseY = pos.Y;
+
+            if (e.LeftButton == MouseButtonState.Released || _rect == null)
+                return;
 
             var x = Math.Min(pos.X, _startPoint.X);
             var y = Math.Min(pos.Y, _startPoint.Y);
@@ -137,7 +230,13 @@ namespace Hqub.Speckle.GUI.Controls
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
-//            rect = null;
+            if (_rect == null) return;
+
+            var point = e.GetPosition(Holst);
+
+            Workarea = new System.Drawing.Rectangle((int)_startPoint.X, (int)_startPoint.Y, (int)point.X, (int)point.Y);
+            var experiment = Core.Experiment.Get();
+            experiment.WorkAreay = Workarea;
         }
 
         private void PreviewEtalonImage_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -151,7 +250,6 @@ namespace Hqub.Speckle.GUI.Controls
 
             if (!_isBackgroundSet)
             {
-                DrawRectangle(0, 0, Holst.ActualWidth - 1, Holst.ActualHeight - 1);
                 _isBackgroundSet = true;
             }
 
@@ -170,5 +268,16 @@ namespace Hqub.Speckle.GUI.Controls
         }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 }

@@ -131,7 +131,7 @@ namespace Hqub.Speckle.GUI.Processing
 
             foreach (var image in images)
             {
-                var correlation = _engine.Compare(etalon.Path, image.Path);
+                var correlation = _engine.Compare(etalon.Path, image.Path, experiment.WorkAreay);
                 _calculateEvent.Publish(new CorrelationValue
                 {
                     EtalonePath = etalon.Path,

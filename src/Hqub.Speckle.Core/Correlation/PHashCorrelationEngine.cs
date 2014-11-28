@@ -36,21 +36,15 @@ namespace Hqub.Speckle.Core.Correlation
             return pcc;
         }
 
+        public double Compare(string pathA, string pathB, Rectangle bound)
+        {
+            return Compare(pathA, pathB);
+        }
+
         public double Compare(Bitmap imageA, Bitmap imageB)
         {
             throw new NotImplementedException(
                 "Алгоритм требует передавать ему пути до изображений. Воспользуйте другой перегрузкой метода Compare (string->string->double)");
-        }
-
-        public double Compare(string pathA, string pathB, Rectangle bound)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double Compare(Bitmap imageA, Bitmap imageB, Rectangle bound)
-        {
-            throw new NotImplementedException(
-              "Алгоритм требует передавать ему пути до изображений. Воспользуйте другой перегрузкой метода Compare (string->string->double)");
         }
 
         public ILogger Logger { get; set; }

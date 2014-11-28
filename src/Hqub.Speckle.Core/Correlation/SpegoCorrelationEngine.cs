@@ -20,6 +20,14 @@ namespace Hqub.Speckle.Core.Correlation
             return Compare(image1, image2);
         }
 
+        public double Compare(string pathA, string pathB, Rectangle bound)
+        {
+            var image1 = BitmapTools.CropImage(new Bitmap(pathA), bound);
+            var image2 = BitmapTools.CropImage(new Bitmap(pathB), bound);
+
+            return Compare(image1, image2);
+        }
+
         public double Compare(Bitmap imageA, Bitmap imageB)
         {
             // Получаем одноканальное изображение:
@@ -63,16 +71,6 @@ namespace Hqub.Speckle.Core.Correlation
             denumerator = Math.Sqrt(dA / amount) * Math.Sqrt(dB / amount);
 
             return numenator / denumerator;
-        }
-
-        public double Compare(string pathA, string pathB, Rectangle bound)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double Compare(Bitmap imageA, Bitmap imageB, Rectangle bound)
-        {
-            throw new NotImplementedException();
         }
 
         public ILogger Logger { get; set; }
