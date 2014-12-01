@@ -16,7 +16,7 @@ namespace Hqub.Speckle.Core
 
         private Experiment()
         {
-            StartExperiment = DateTime.Now;
+            StartExperiment = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             Period = 10;
         }
 

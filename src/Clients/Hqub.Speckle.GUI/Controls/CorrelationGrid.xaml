@@ -45,7 +45,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Дата"
                                         Width="Auto"
-                                        Binding="{Binding Time, StringFormat={}{0:hh:mm:ss}}"
+                                        Binding="{Binding Time, StringFormat={}{0:HH:mm:ss}}"
                                         >
                         
                     </DataGridTextColumn>

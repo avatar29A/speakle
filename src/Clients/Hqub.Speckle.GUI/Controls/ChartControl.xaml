@@ -59,7 +59,7 @@
                         <telerik:ChartArea NoDataString="Нет данных для построения графика">
                             <telerik:ChartArea.AxisX>
                                 <telerik:AxisX IsDateTime="True"
-                                               DefaultLabelFormat="hh:mm:ss"
+                                               DefaultLabelFormat="HH:mm:ss"
                                                LabelRotationAngle="45"
                                                ></telerik:AxisX>
                             </telerik:ChartArea.AxisX>

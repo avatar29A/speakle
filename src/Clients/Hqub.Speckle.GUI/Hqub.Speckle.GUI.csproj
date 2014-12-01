@@ -131,6 +131,7 @@
     <Compile Include="Experiment\SpeckleExperiment.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="ManagerModule.cs" />
+    <Compile Include="Metadata.cs" />
     <Compile Include="Model\Events\CorrelationCalculateCompleateEventEntity.cs" />
     <Compile Include="Model\Events\ExperimentCreateEventEntity.cs" />
     <Compile Include="Model\ProjectFile.cs" />
