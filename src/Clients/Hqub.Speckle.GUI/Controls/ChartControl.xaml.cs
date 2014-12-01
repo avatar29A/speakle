@@ -38,6 +38,12 @@ namespace Hqub.Speckle.GUI.Controls
             Values = new ObservableCollection<CorrelationValue>();
             _correlationValues = new List<CorrelationValue>();
 
+
+            radChart.DefaultView.ChartArea.AxisY.MinValue = 0;
+            radChart.DefaultView.ChartArea.AxisY.MaxValue = 2;
+            radChart.DefaultView.ChartArea.AxisY.Step = 0.10;
+            radChart.DefaultView.ChartArea.AxisY.AutoRange = false;
+
             SubsribeOnEvents();
         }
 
@@ -114,8 +120,6 @@ namespace Hqub.Speckle.GUI.Controls
         {
             Values.Clear();
             _correlationValues.Clear();
-            _correlationValues.Add(new CorrelationValue { Value = 0, Time = Core.Experiment.Get().StartExperiment });
-            _correlationValues.Add(new CorrelationValue { Value = 2, Time = Core.Experiment.Get().StartExperiment });
         }
 
         private void OnCompleate(object e)
