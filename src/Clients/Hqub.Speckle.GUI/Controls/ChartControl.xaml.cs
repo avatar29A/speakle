@@ -46,7 +46,7 @@ namespace Hqub.Speckle.GUI.Controls
         private void SetupChartAxis()
         {
             this.radChart.DefaultView.ChartArea.AxisY.MinValue = 0;
-            this.radChart.DefaultView.ChartArea.AxisY.MaxValue = 2;
+            this.radChart.DefaultView.ChartArea.AxisY.MaxValue = 1;
             this.radChart.DefaultView.ChartArea.AxisY.Step = 0.10;
             this.radChart.DefaultView.ChartArea.AxisY.AutoRange = false;
             this.radChart.DefaultView.ChartArea.EnableAnimations = false;
@@ -132,14 +132,22 @@ namespace Hqub.Speckle.GUI.Controls
             Values = new ObservableCollection<CorrelationValue>(_correlationValues.OrderBy(x => x.Time));
         }
 
+        private int _counter;
+
         private void OnCalculatedCorrelationEvent(CorrelationValue val)
         {
             this.Dispatcher.Invoke(
                 () =>
                     {
+                        ++_counter;
                         _correlationValues.Add(val);
 
-                        Values = new ObservableCollection<CorrelationValue>(_correlationValues.OrderBy(x => x.Time));
+                        if (_counter % 10 == 0)
+                        {
+                            _counter = 0;
+                            Values = new ObservableCollection<CorrelationValue>(_correlationValues.OrderBy(x => x.Time));
+                        }
+
                     });
         }
 

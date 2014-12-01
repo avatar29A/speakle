@@ -42,11 +42,11 @@
             </MenuItem>
             
             <MenuItem Header="Методы расчета">
-                <MenuItem Header="Алгоритм из ПО 'Спего'"
+                <MenuItem Header="Метод установления корреляции"
                           Command="{Binding SelectAlgoritmCommand}" CommandParameter="spego"
                           IsChecked="{Binding IsSpegoAlgChecked, Mode=TwoWay}"
                           />
-                <MenuItem Header="Алгоритм на основе pHash" 
+                <MenuItem Header="Метод установления корреляции (на базе pHash)" 
                           Command="{Binding SelectAlgoritmCommand}" CommandParameter="phash"
                           IsChecked="{Binding IsPHashChecked, Mode=TwoWay}"
                           />
