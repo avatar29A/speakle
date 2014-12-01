@@ -16,6 +16,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
     using System.CodeDom;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.IO;
 
     using AviFile;
 
@@ -92,7 +93,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             ImageProcessingAmount = 0;
         }
 
-        private void CreateVideo()
+        private void CreateAndOpenVideo()
         {
             //Спрашиваем куда сохранить:
             var saveDialog = new SaveFileDialog();
@@ -120,6 +121,9 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
                     aviStream.AddFrame(b);
                     b.Dispose();
                 }
+
+                var directory = Path.GetDirectoryName(saveDialog.FileName);
+                Process.Start("explorer.exe", directory);
             }
             catch (Exception exception)
             {
@@ -128,7 +132,6 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             finally
             {
                 aviManager.Close();
-
             }
         }
 
@@ -342,7 +345,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
                 return;
             }
 
-            this.CreateVideo();
+            this.CreateAndOpenVideo();
         }
 
         private void OnValueCalcuted(CorrelationValue val)
