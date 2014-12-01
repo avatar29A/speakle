@@ -38,13 +38,17 @@ namespace Hqub.Speckle.GUI.Controls
             Values = new ObservableCollection<CorrelationValue>();
             _correlationValues = new List<CorrelationValue>();
 
-
-            radChart.DefaultView.ChartArea.AxisY.MinValue = 0;
-            radChart.DefaultView.ChartArea.AxisY.MaxValue = 2;
-            radChart.DefaultView.ChartArea.AxisY.Step = 0.10;
-            radChart.DefaultView.ChartArea.AxisY.AutoRange = false;
+            this.SetupChartAxis();
 
             SubsribeOnEvents();
+        }
+
+        private void SetupChartAxis()
+        {
+            this.radChart.DefaultView.ChartArea.AxisY.MinValue = 0;
+            this.radChart.DefaultView.ChartArea.AxisY.MaxValue = 2;
+            this.radChart.DefaultView.ChartArea.AxisY.Step = 0.10;
+            this.radChart.DefaultView.ChartArea.AxisY.AutoRange = false;
         }
 
         #region Commands
