@@ -97,6 +97,7 @@
                     Style="{StaticResource ToolbarButtonStyle}"
             		IsEnabled="False"
             		ToolTip="Видео"
+                    Visibility="Collapsed"
                     
                  >
                     <Image Source="/Content/video.png"/>
