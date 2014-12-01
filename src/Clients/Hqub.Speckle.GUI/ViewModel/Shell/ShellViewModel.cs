@@ -67,6 +67,10 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
             var etalonLoadedEvent = EventAggregator.GetEvent<Events.EtalonLoadedEvent>();
             etalonLoadedEvent.Subscribe(SetEtalon);
+
+            var experimentPhotoSeletChangedEvent = EventAggregator.GetEvent<Core.Events.ExperimentPhotoSeletChangedEvent>();
+            experimentPhotoSeletChangedEvent.Subscribe((image) => OnPropertyChanged(() => this.FrameToolbarInfo));
+
         }
 
         private void SetEtalon(ImageWrapper etalon)
@@ -87,7 +91,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
         #region Properties
 
-        public Core.Experiment Experiment
+        public Experiment Experiment
         {
             get { return _experiment; }
             set
@@ -108,6 +112,19 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             {
                 _selectedImage = value;
                 OnPropertyChanged(() => SelectedImage);
+            }
+        }
+
+        public string FrameToolbarInfo
+        {
+            get
+            {
+                if (Experiment == null || Experiment.Images == null || Experiment.Images.Count == 0) return string.Empty;
+
+                return string.Format(
+                    "Выбрано {0} из {1}",
+                    Experiment.Images.Count(p => p.IsChecked),
+                    Experiment.Images.Count);
             }
         }
 
@@ -218,6 +235,8 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
             Experiment.Images =
                 new ObservableCollection<ImageWrapper>(fileDialog.FileNames.Select(f => new ImageWrapper(f)));
+
+            OnPropertyChanged(() => this.FrameToolbarInfo);
         }
 
         public ICommand RunAnalysingCommand

@@ -170,7 +170,7 @@
                                         </Button>
                                     </ToolBar>
                                     <StatusBar DockPanel.Dock="Bottom">
-                                        <TextBlock Text="{Binding Experiment.Images.Count, StringFormat={}Кол-во кадров: {0}}"></TextBlock>
+                                        <TextBlock Text="{Binding FrameToolbarInfo}"></TextBlock>
                                     </StatusBar>
                                     <ListBox
         		                        ItemsSource="{Binding Experiment.Images}"
@@ -191,12 +191,10 @@
                                                     >
                                 <controls:CorrelationGrid/>
                             </telerikDocking:RadPane>
-
                         </telerikDocking:RadPaneGroup>
                     </telerikDocking:RadSplitContainer>
                 </telerikDocking:RadDocking>
             </Grid>
-           
         </Grid>
 
         <StatusBar Grid.Row="3">

@@ -5,16 +5,23 @@ namespace Hqub.Speckle.Core.Model
 {
     using System.Text.RegularExpressions;
 
+    using Microsoft.Practices.Prism.PubSubEvents;
+    using Microsoft.Practices.ServiceLocation;
+
     public class ImageWrapper : INotifyPropertyChanged
     {
-        private string _name;
-        private bool _isChecked = true;
-        private bool _isProcessed;
+        private string name;
+        private bool isChecked = true;
+        private bool isProcessed;
+
+        private IEventAggregator _eventAggregator;
 
         public ImageWrapper(string filename)
         {
             Name = System.IO.Path.GetFileName(filename);
             Path = filename;
+
+            _eventAggregator = ServiceLocator.Current.GetInstance<IEventAggregator>();
         }
 
         public ImageWrapper()
@@ -22,15 +29,14 @@ namespace Hqub.Speckle.Core.Model
             
         }
 
-
         public CorrelationValue Correlation { get; set; }
 
         public string Name
         {
-            get { return _name; }
+            get { return this.name; }
             set
             {
-                _name = value;
+                this.name = value;
                 OnPropertyChanged();
             }
         }
@@ -39,20 +45,22 @@ namespace Hqub.Speckle.Core.Model
 
         public bool IsChecked
         {
-            get { return _isChecked; }
+            get { return this.isChecked; }
             set
             {
-                _isChecked = value;
+                this.isChecked = value;
+
+                _eventAggregator.GetEvent<Events.ExperimentPhotoSeletChangedEvent>().Publish(this);
                 OnPropertyChanged();
             }
         }
 
         public bool IsProcessed
         {
-            get { return _isProcessed; }
+            get { return this.isProcessed; }
             set
             {
-                _isProcessed = value;
+                this.isProcessed = value;
                 OnPropertyChanged();
             }
         }
@@ -73,6 +81,8 @@ namespace Hqub.Speckle.Core.Model
             }
         }
 
+        #region Implementation INotifyPropertyChanged
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -80,5 +90,7 @@ namespace Hqub.Speckle.Core.Model
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        #endregion
     }
 }

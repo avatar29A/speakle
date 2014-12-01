@@ -132,13 +132,11 @@ namespace Hqub.Speckle.GUI.Controls
             Values = new ObservableCollection<CorrelationValue>(_correlationValues.OrderBy(x => x.Time));
         }
 
-        private int _counter;
         private void OnCalculatedCorrelationEvent(CorrelationValue val)
         {
             this.Dispatcher.Invoke(
                 () =>
                     {
-                        ++_counter;
                         _correlationValues.Add(val);
 
                         Values = new ObservableCollection<CorrelationValue>(_correlationValues.OrderBy(x => x.Time));
