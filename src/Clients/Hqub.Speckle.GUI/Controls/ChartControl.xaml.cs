@@ -49,6 +49,7 @@ namespace Hqub.Speckle.GUI.Controls
             this.radChart.DefaultView.ChartArea.AxisY.MaxValue = 2;
             this.radChart.DefaultView.ChartArea.AxisY.Step = 0.10;
             this.radChart.DefaultView.ChartArea.AxisY.AutoRange = false;
+            this.radChart.DefaultView.ChartArea.EnableAnimations = false;
         }
 
         #region Commands
@@ -140,11 +141,7 @@ namespace Hqub.Speckle.GUI.Controls
                         ++_counter;
                         _correlationValues.Add(val);
 
-                        if (_counter % 10 == 0)
-                        {
-                            _counter = 0;
-                            Values = new ObservableCollection<CorrelationValue>(_correlationValues.OrderBy(x => x.Time));
-                        }
+                        Values = new ObservableCollection<CorrelationValue>(_correlationValues.OrderBy(x => x.Time));
                     });
         }
 
