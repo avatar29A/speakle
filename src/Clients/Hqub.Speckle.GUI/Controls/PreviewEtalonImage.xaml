@@ -17,19 +17,21 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-        <Canvas x:Name="Holst" 
-                MouseDown="Canvas_MouseDown" 
-                MouseMove="Canvas_MouseMove"
-                MouseUp="Canvas_MouseUp"
-                ClipToBounds="True"
-                >
-            <Canvas.Background>
-                <ImageBrush ImageSource="{StaticResource ElementBackgroundResource}"
-                            Stretch="Uniform">
-                </ImageBrush>
-            </Canvas.Background>
-        </Canvas>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Visible">
+            <Canvas x:Name="Holst" 
+                    MouseDown="Canvas_MouseDown" 
+                    MouseMove="Canvas_MouseMove"
+                    MouseUp="Canvas_MouseUp"
+                    ClipToBounds="True"
+                    >
+                <Canvas.Background>
+                    <ImageBrush ImageSource="{StaticResource ElementBackgroundResource}"
+                                Stretch="Uniform">
+                    </ImageBrush>
+                </Canvas.Background>
+            </Canvas>
+        </ScrollViewer>
 
         <StatusBar Grid.Row="1">
             <DockPanel LastChildFill="False">

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using Hqub.Speckle.Core.Model;
 using Hqub.Speckle.GUI.Model.Events;
-using Microsoft.Practices.Prism.PubSubEvents;
 
 namespace Hqub.Speckle.GUI.Processing
 {
