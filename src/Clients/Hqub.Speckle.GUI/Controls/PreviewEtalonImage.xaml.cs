@@ -44,7 +44,7 @@ namespace Hqub.Speckle.GUI.Controls
 
             SubsribeOnEvents();
 
-         Holst.SizeChanged += Holst_SizeChanged;
+            Holst.SizeChanged += Holst_SizeChanged;
         }
 
         private void Holst_SizeChanged(object sender, SizeChangedEventArgs e)

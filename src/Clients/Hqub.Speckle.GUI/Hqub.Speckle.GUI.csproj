@@ -243,6 +243,10 @@
       <Project>{64a41ee5-ef7c-4db4-bf2d-7517e91e3ed6}</Project>
       <Name>Hqub.Speckle.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ThirdParty\AviFile.csproj">
+      <Project>{abb32a29-af50-47fa-b243-5fd75a5aba54}</Project>
+      <Name>AviFile</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
