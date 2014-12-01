@@ -71,7 +71,7 @@ namespace AviFile
 				throw new Exception("Exception in AVIFileGetStream: "+result.ToString());
 			}
 
-			VideoStream stream = new VideoStream(aviFile, aviStream);
+			var stream = new VideoStream(aviFile, aviStream);
 			streams.Add(stream);
 			return stream;
 		}

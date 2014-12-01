@@ -95,10 +95,8 @@
 
                 <Button 
                     Style="{StaticResource ToolbarButtonStyle}"
-            		IsEnabled="False"
             		ToolTip="Видео"
-                    Visibility="Collapsed"
-                    
+                    Command="{Binding CreateVideoFileCommand}"
                  >
                     <Image Source="/Content/video.png"/>
                 </Button>

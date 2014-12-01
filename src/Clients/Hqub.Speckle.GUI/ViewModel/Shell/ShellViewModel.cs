@@ -15,6 +15,9 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
     using System;
     using System.CodeDom;
     using System.Collections.Generic;
+    using System.Drawing;
+
+    using AviFile;
 
     using Hqub.Speckle.Core;
 
@@ -87,6 +90,46 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         {
             LastProcessingFileName = string.Empty;
             ImageProcessingAmount = 0;
+        }
+
+        private void CreateVideo()
+        {
+            //Спрашиваем куда сохранить:
+            var saveDialog = new SaveFileDialog();
+            saveDialog.FileName = "experiment.avi";
+            saveDialog.Filter = "Avi files (*.avi)|*.avi";
+
+            var result = saveDialog.ShowDialog();
+
+            if (result != true) return;
+
+            var aviManager = new AviManager(saveDialog.FileName, false);
+
+            var experiment = Core.Experiment.Get();
+            var images = experiment.Images.Where(x => x.IsChecked).ToList();
+
+            if (images.Count == 0) return;
+
+            try
+            {
+                var aviStream = aviManager.AddVideoStream(true, 2, (Bitmap)Bitmap.FromFile(images.First().Path));
+
+                foreach (var image in images)
+                {
+                    var b = (Bitmap)Bitmap.FromFile(image.Path);
+                    aviStream.AddFrame(b);
+                    b.Dispose();
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.Main.Fatal(exception.Message, exception);
+            }
+            finally
+            {
+                aviManager.Close();
+
+            }
         }
 
         #region Properties
@@ -283,6 +326,24 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             this.ResetStatusBar();
         }
 
+        public ICommand CreateVideoFileCommand
+        {
+            get
+            {
+                return new DelegateCommand(CreateVideoFileCommandExecute);
+            }
+        }
+
+        private void CreateVideoFileCommandExecute()
+        {
+            if (Experiment.Images == null || !Experiment.Images.Any(x => x.IsChecked))
+            {
+                MessageBox.Show("Создание видео не возможно. Не выбрано ни одного кадра!");
+                return;
+            }
+
+            this.CreateVideo();
+        }
 
         private void OnValueCalcuted(CorrelationValue val)
         {

@@ -112,6 +112,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bootstrap.cs" />
+    <Compile Include="Controls\AviSampler.xaml.cs">
+      <DependentUpon>AviSampler.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ChartControl.xaml.cs">
       <DependentUpon>ChartControl.xaml</DependentUpon>
     </Compile>
@@ -154,6 +157,10 @@
     <Compile Include="View\Shell\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\AviSampler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ChartControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
