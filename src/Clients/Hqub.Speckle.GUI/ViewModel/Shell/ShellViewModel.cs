@@ -47,13 +47,11 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
             _engines = new Dictionary<string, Type>
                            {
+                               { StaticVariable.PHashAlgCode, typeof(PHashCorrelationEngine) },
+                               { StaticVariable.SpegoAlgCode, typeof(SpegoCorrelationEngine) },
                                {
-                                   StaticVariable.PHashAlgCode,
-                                   typeof(PHashCorrelationEngine)
-                               },
-                               {
-                                   StaticVariable.SpegoAlgCode,
-                                   typeof(SpegoCorrelationEngine)
+                                   StaticVariable.SignalLeveAlgCode,
+                                   typeof(SignalLevelCorrelationEngine)
                                }
                            };
 
@@ -73,7 +71,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             etalonLoadedEvent.Subscribe(SetEtalon);
 
             var experimentPhotoSeletChangedEvent = EventAggregator.GetEvent<Core.Events.ExperimentPhotoSeletChangedEvent>();
-            experimentPhotoSeletChangedEvent.Subscribe((image) => OnPropertyChanged(() => this.FrameToolbarInfo));
+            experimentPhotoSeletChangedEvent.Subscribe(image => OnPropertyChanged(() => this.FrameToolbarInfo));
 
         }
 
@@ -223,6 +221,23 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             }
         }
 
+        private bool isSignalAlgChecked;
+        public bool IsSignalAlgChecked 
+        {
+            get
+            {
+                return this.isSignalAlgChecked;
+            }
+            set
+            {
+                this.isSignalAlgChecked = value;
+                this.isSpegoAlgChecked = !value;
+                this.isPHashChecked = !value;
+
+                this.RaiseMenuItems();
+            }
+        }
+
         public bool IsPHashChecked
         {
             get
@@ -242,6 +257,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         {
             OnPropertyChanged(() => IsPHashChecked);
             OnPropertyChanged(() => IsSpegoAlgChecked);
+            OnPropertyChanged(() => IsSignalAlgChecked);
         }
 
         #endregion
@@ -375,12 +391,16 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
             switch (alg)
             {
-                case Core.StaticVariable.PHashAlgCode:
+                case StaticVariable.PHashAlgCode:
                     IsPHashChecked = true;
                     break;
 
-                case Core.StaticVariable.SpegoAlgCode:
-                     IsSpegoAlgChecked = true;
+                case StaticVariable.SpegoAlgCode:
+                    IsSpegoAlgChecked = true;
+                    break;
+
+                case StaticVariable.SignalLeveAlgCode:
+                    IsSignalAlgChecked = true;
                     break;
             }
         }

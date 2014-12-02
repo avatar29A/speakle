@@ -11,5 +11,7 @@ namespace Hqub.Speckle.Core
         public const string PHashAlgCode = "phash";
 
         public const string SpegoAlgCode = "spego";
+
+        public const string SignalLeveAlgCode = "signal";
     }
 }

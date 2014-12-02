@@ -224,19 +224,18 @@ namespace Hqub.Speckle.GUI.Controls
             _rect.Width = w;
             _rect.Height = h;
 
+            Workarea = new System.Drawing.Rectangle((int)x, (int)y, (int)w, (int)h);
+
+            var experiment = Core.Experiment.Get();
+            experiment.WorkAreay = Workarea;
+
             Canvas.SetLeft(_rect, x);
             Canvas.SetTop(_rect, y);
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (_rect == null) return;
 
-            var point = e.GetPosition(Holst);
-
-            Workarea = new System.Drawing.Rectangle((int)_startPoint.X, (int)_startPoint.Y, (int)point.X, (int)point.Y);
-            var experiment = Core.Experiment.Get();
-            experiment.WorkAreay = Workarea;
         }
 
         private void PreviewEtalonImage_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)

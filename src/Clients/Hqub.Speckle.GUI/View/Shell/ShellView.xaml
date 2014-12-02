@@ -50,6 +50,11 @@
                           Command="{Binding SelectAlgoritmCommand}" CommandParameter="phash"
                           IsChecked="{Binding IsPHashChecked, Mode=TwoWay}"
                           />
+
+                <MenuItem Header="Метод вычисления по уровню сигнала" 
+                          Command="{Binding SelectAlgoritmCommand}" CommandParameter="signal"
+                          IsChecked="{Binding IsSignalAlgChecked, Mode=TwoWay}"
+                          />
             </MenuItem>
             
             <MenuItem Header="?">

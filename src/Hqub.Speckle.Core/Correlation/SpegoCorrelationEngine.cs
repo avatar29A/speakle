@@ -7,11 +7,6 @@ namespace Hqub.Speckle.Core.Correlation
 {
     public class SpegoCorrelationEngine : ICorrelationEngine
     {
-        public void AddImage()
-        {
-            throw new NotImplementedException();
-        }
-
         public double Compare(string pathA, string pathB)
         {
             var image1 = new Bitmap(pathA);
@@ -102,11 +97,6 @@ namespace Hqub.Speckle.Core.Correlation
             lockSource.UnlockBits();
 
             return m;
-        }
-
-        private int Sqr(int n)
-        {
-            return n * n;
         }
 
         #endregion

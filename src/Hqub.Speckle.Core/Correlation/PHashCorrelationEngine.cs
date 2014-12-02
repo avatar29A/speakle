@@ -15,11 +15,6 @@ namespace Hqub.Speckle.Core.Correlation
         public static extern int ph_compare_images(string file1, string file2, out double pcc, double sigma = 3.5,
             double gamma = 1.0, int N = 180, double threshold = 0.90);
 
-        public void AddImage()
-        {
-            throw new NotImplementedException();
-        }
-
         public double Compare(string pathA, string pathB)
         {
             double pcc = 0.0;

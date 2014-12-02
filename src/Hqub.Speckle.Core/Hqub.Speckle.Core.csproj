@@ -49,6 +49,7 @@
     <Compile Include="BitmapExtensions\BitmapTools.cs" />
     <Compile Include="BitmapExtensions\LockBitmap.cs" />
     <Compile Include="Correlation\PHashCorrelationEngine.cs" />
+    <Compile Include="Correlation\SignalLevelCorrelationEngine.cs" />
     <Compile Include="Correlation\SpegoCorrelationEngine.cs" />
     <Compile Include="Events\ExperimentPhotoSeletChangedEvent.cs" />
     <Compile Include="Experiment.cs" />
