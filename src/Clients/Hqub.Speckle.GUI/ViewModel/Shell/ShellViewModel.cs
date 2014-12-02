@@ -21,6 +21,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
     using AviFile;
 
     using Hqub.Speckle.Core;
+    using Hqub.Speckle.GUI.Events;
 
     using Microsoft.Practices.ServiceLocation;
 
@@ -149,6 +150,19 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
         public IEventAggregator EventAggregator { get; set; }
 
+        public bool IsRunningExperiment
+        {
+            get
+            {
+                return this.isRunningExperiment;
+            }
+            set
+            {
+                this.isRunningExperiment = value;
+                OnPropertyChanged(() => this.IsRunningExperiment);
+            }
+        }
+
         public ImageWrapper SelectedImage
         {
             get { return _selectedImage; }
@@ -222,6 +236,9 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         }
 
         private bool isSignalAlgChecked;
+
+        private bool isRunningExperiment;
+
         public bool IsSignalAlgChecked 
         {
             get
@@ -303,11 +320,23 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
         public ICommand RunAnalysingCommand
         {
-            get { return new DelegateCommand(RunAnalysingCommandExecute); }
+            get { return new DelegateCommand(this.RunStopAnalysingCommandExecute); }
         }
 
-        private void RunAnalysingCommandExecute()
+        private void RunStopAnalysingCommandExecute()
         {
+            if (IsRunningExperiment)
+            {
+                IsRunningExperiment = false;
+
+                var stopEvent = EventAggregator.GetEvent<StopExperimentEvent>();
+                stopEvent.Publish(null);
+
+                return;
+            }
+
+            IsRunningExperiment = true;
+
             if (Etalaon == null)
             {
                 MessageBox.Show(

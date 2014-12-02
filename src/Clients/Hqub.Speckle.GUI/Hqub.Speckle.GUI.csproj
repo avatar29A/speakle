@@ -124,12 +124,15 @@
     <Compile Include="Controls\PreviewEtalonImage.xaml.cs">
       <DependentUpon>PreviewEtalonImage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\StartStopIconConverter.cs" />
+    <Compile Include="Converters\StartStopTooltipConverter.cs" />
     <Compile Include="Events\AggregationEventService.cs" />
     <Compile Include="Events\CorrelationCalculateCompleateEvent.cs" />
     <Compile Include="Events\CorrelationCalculatedEvent.cs" />
     <Compile Include="Events\EtalonLoadedEvent.cs" />
     <Compile Include="Events\ExperimentCreatedEvent.cs" />
     <Compile Include="Events\StartNewAnalysisEvent.cs" />
+    <Compile Include="Events\StopExperimentEvent.cs" />
     <Compile Include="Experiment\IExperiment.cs" />
     <Compile Include="Experiment\SpeckleExperiment.cs" />
     <Compile Include="Logger.cs" />
@@ -226,6 +229,7 @@
     <Resource Include="Content\excel.png" />
     <Resource Include="Content\png.png" />
     <Resource Include="Despeckle.ico" />
+    <Resource Include="Content\stop.png" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -242,9 +246,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\Hqub.Speckle.Core\Hqub.Speckle.Core.csproj">
       <Project>{64a41ee5-ef7c-4db4-bf2d-7517e91e3ed6}</Project>

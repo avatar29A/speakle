@@ -6,6 +6,7 @@
              xmlns:view="clr-namespace:Hqub.Speckle.GUI.View"
              xmlns:telerikDocking="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Docking"
              xmlns:controls="clr-namespace:Hqub.Speckle.GUI.Controls"
+             xmlns:converters="clr-namespace:Hqub.Speckle.GUI.Converters"
              x:Class="Hqub.Speckle.GUI.View.Shell.ShellView"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
@@ -24,6 +25,9 @@
             </StackPanel>
            
         </DataTemplate>
+
+        <converters:StartStopIconConverter x:Key="startStopIconConverter"/>
+        <converters:StartStopTooltipConverter x:Key="startStopTooltipConverter"/>
     </view:BaseUserControlView.Resources>
 
     <Grid>
@@ -91,9 +95,9 @@
                 <Button 
                     Style="{StaticResource ToolbarButtonStyle}"
             		Command="{Binding RunAnalysingCommand}"
-            		ToolTip="Запустить эксперимент"
+            		ToolTip="{Binding IsRunningExperiment, Converter={StaticResource startStopTooltipConverter}}"
                  >
-                    <Image Source="/Content/play.png"/>
+                    <Image Source="{Binding IsRunningExperiment, Converter={StaticResource startStopIconConverter}}"/>
                 </Button>
 
                 <Separator/>
