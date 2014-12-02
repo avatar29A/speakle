@@ -1,6 +1,7 @@
 ﻿namespace Hqub.Speckle.Core.Correlation
 {
     using System.Drawing;
+    using System.Threading;
 
     using Hqub.Speckle.Core.BitmapExtensions;
 
@@ -34,6 +35,8 @@
 
 //            var binA = pixelA.R;
             var binB = pixelB.R;
+
+            Thread.Sleep(100);
 
             return binB / 100.0;    
         }

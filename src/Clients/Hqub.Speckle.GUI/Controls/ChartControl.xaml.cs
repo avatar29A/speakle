@@ -119,6 +119,9 @@ namespace Hqub.Speckle.GUI.Controls
 
             var compleate = _eventAggregator.GetEvent<Events.CorrelationCalculateCompleateEvent>();
             compleate.Subscribe(this.OnCompleate);
+
+            var createNewExperiment = _eventAggregator.GetEvent<Events.ExperimentCreatedEvent>();
+            createNewExperiment.Subscribe(this.OnStartAnalising);
         }
 
         private void OnStartAnalising(object args)
