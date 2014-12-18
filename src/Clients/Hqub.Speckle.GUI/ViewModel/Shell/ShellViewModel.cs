@@ -83,7 +83,8 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
         private void CalculateCorrelationCompleated(CorrelationCalculateCompleateEventEntity arg)
         {
-//            MessageBox.Show("Рассчет закончен!");
+            IsRunningExperiment = false;
+            //            MessageBox.Show("Рассчет закончен!");
         }
 
         private void ResetStatusBar()

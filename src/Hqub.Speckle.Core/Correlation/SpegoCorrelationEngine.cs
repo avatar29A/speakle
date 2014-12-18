@@ -17,6 +17,7 @@ namespace Hqub.Speckle.Core.Correlation
 
         public double Compare(string pathA, string pathB, Rectangle bound)
         {
+//            bound = new Rectangle(437, 391, 634-437, 527-391);
             var image1 = BitmapTools.CropImage(new Bitmap(pathA), bound);
             var image2 = BitmapTools.CropImage(new Bitmap(pathB), bound);
 

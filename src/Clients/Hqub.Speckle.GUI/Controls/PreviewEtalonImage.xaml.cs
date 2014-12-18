@@ -235,7 +235,8 @@ namespace Hqub.Speckle.GUI.Controls
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
-
+            if (_rect == null)
+                return;
         }
 
         private void PreviewEtalonImage_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
