@@ -98,6 +98,7 @@
     <Reference Include="Telerik.Windows.Controls, Version=2014.2.729.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="telerik.windows.controls.charting, Version=2014.2.729.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="telerik.windows.controls.docking, Version=2014.2.729.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Windows.Controls.Input, Version=2014.2.729.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="telerik.windows.controls.navigation, Version=2014.2.729.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Data, Version=2014.2.729.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="UIAutomationProvider" />
@@ -124,8 +125,14 @@
     <Compile Include="Controls\PreviewEtalonImage.xaml.cs">
       <DependentUpon>PreviewEtalonImage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\WorkareaSettings.xaml.cs">
+      <DependentUpon>WorkareaSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\StartStopIconConverter.cs" />
     <Compile Include="Converters\StartStopTooltipConverter.cs" />
+    <Compile Include="Dialogs\WorkAreaSettingsDialog.xaml.cs">
+      <DependentUpon>WorkAreaSettingsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Events\AggregationEventService.cs" />
     <Compile Include="Events\CorrelationCalculateCompleateEvent.cs" />
     <Compile Include="Events\CorrelationCalculatedEvent.cs" />
@@ -173,6 +180,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\PreviewEtalonImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WorkareaSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\WorkAreaSettingsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

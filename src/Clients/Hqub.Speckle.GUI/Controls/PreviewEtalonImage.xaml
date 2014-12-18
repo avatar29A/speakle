@@ -56,7 +56,16 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
+                
             </DockPanel>
+            
+            <DockPanel>
+                <Button DockPanel.Dock="Left" Width="20" Height="20" ToolTip="Настройка рабочей области" Command="{Binding ElementName=_this, Path=OpenWorkareaSettingsCommand}">
+                    <Image Source="/Content/settings.png"></Image>
+                </Button>
+
+            </DockPanel>
+            
         </StatusBar>
     </Grid>
 </UserControl>

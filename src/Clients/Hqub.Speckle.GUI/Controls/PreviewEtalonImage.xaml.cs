@@ -16,6 +16,8 @@ namespace Hqub.Speckle.GUI.Controls
 
     using JetBrains.Annotations;
 
+    using Microsoft.Practices.Prism.Commands;
+
     /// <summary>
     /// Interaction logic for PreviewEtalonImage.xaml
     /// </summary>
@@ -44,25 +46,6 @@ namespace Hqub.Speckle.GUI.Controls
 
             SubsribeOnEvents();
 
-            Holst.SizeChanged += Holst_SizeChanged;
-        }
-
-        private void Holst_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            var deltaHeight = Math.Abs(e.NewSize.Height - e.PreviousSize.Height);
-            var deltaWidth = Math.Abs(e.NewSize.Width - e.PreviousSize.Width);
-
-            var percentChangeWidth = deltaWidth / e.PreviousSize.Width;
-            var precentChangeHeight = deltaHeight / e.PreviousSize.Height;
-
-            var rectWidth = 0;
-            var rectHeight = 0;
-
-        }
-
-        private int GetSign(double oldValue, double newValue)
-        {
-            return oldValue <= newValue ? 1 : -1;
         }
 
         #endregion
@@ -126,6 +109,26 @@ namespace Hqub.Speckle.GUI.Controls
 
         #endregion
 
+        #region Commands
+
+        public ICommand OpenWorkareaSettingsCommand { get { return new DelegateCommand(OpenWorkareaSettingsCommandExecute); } }
+
+        private void OpenWorkareaSettingsCommandExecute()
+        {
+            var dialog = new Dialogs.WorkAreaSettingsDialog(new Rect(Workarea.X, Workarea.Y, Workarea.Width, Workarea.Height));
+            dialog.ShowDialog();
+
+
+            if (dialog.DialogResult == true)
+            {
+                Workarea = new System.Drawing.Rectangle(dialog.X, dialog.Y, dialog.AreaWidth, dialog.AreaHeight);
+                DrawRectangle(dialog.X, dialog.Y, dialog.AreaWidth, dialog.AreaHeight);
+                
+            }
+        }
+
+        #endregion
+
         #region Private Methods
 
         private void SubsribeOnEvents()
@@ -164,7 +167,7 @@ namespace Hqub.Speckle.GUI.Controls
             };
 
             Canvas.SetLeft(_rect, x);
-            Canvas.SetRight(_rect, y);
+            Canvas.SetTop(_rect, y);
 
             Holst.Children.Add(_rect);
         }
