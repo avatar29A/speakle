@@ -1,5 +1,7 @@
 # Описание #
 
+[![Build Status](https://travis-ci.org/avatar29A/MusicBrainz.svg)](https://travis-ci.org/avatar29A/MTGO-Free)
+
 Приложение speck-studio создано для помощи в проведении иследований активности вирусов в клетке на основе анализа [спекл-картинок](https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B5%D0%BA%D0%BB).
 
 В основе анализа изображений лежит библиотека [pHash](http://www.phash.org/) из которой использует алгоритм персистентного хэша. 
