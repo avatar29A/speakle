@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+            
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
              x:Class="Hqub.Speckle.GUI.Controls.ChartControl" 
              mc:Ignorable="d" 
             x:Name="_this"
@@ -14,29 +15,30 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
+
         <ToolBar Background="White">
             <Button Width="36"
-                    Height="36"
-                    Command="{Binding ElementName=_this, Path=ExportXlsCommand}"
-                    ToolTip="Экспорт в xls"
+				Height="36"
+				Command="{Binding ExportXlsCommand, ElementName=_this}"
+				ToolTip="Экспорт в xls"
                     >
                 <Image
-                    Source="/Content/excel.png"
+					Source="/Content/excel.png"
                     />
             </Button>
 
             <Button Width="36"
-                    Height="36"
-                    Command="{Binding ElementName=_this, Path=ExportPngCommand}"
-                    ToolTip="Экспорт в png"
+				Height="36"
+				Command="{Binding ExportPngCommand, ElementName=_this}"
+				ToolTip="Экспорт в png"
                     >
                 <Image
-                    Source="/Content/png.png"
+					Source="/Content/png.png"
                     />
             </Button>
         </ToolBar>
-        
+
+
         <telerik:RadChart ItemsSource="{Binding ElementName=_this, Path=Values}"
                           x:Name="radChart"
                           Grid.Row="1"
