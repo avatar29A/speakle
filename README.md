@@ -1,29 +1,32 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Приложение speck-studio создано для помощи в проведении иследований активности вирусов в клетке на основе анализа [спекл-картинок](https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B5%D0%BA%D0%BB).
 
-### What is this repository for? ###
+В основе анализа изображений лежит библиотека [pHash](http://www.phash.org/) из которой использует алгоритм персистентного хэша. 
+Так же реализован собственный метод нахождения корреляции между двумя спекл-картинками.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+# Функции #
 
-### How do I get set up? ###
+Приложение на текущий момент предоставляет следующие возможности:
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* Выбор эталона
+* Построение графика корреляции
+* Экспорт значений корреляции в Exel
+* Компиляция кадров с камеры в видео файл (*.avi)
 
-### Contribution guidelines ###
+# В планах #
 
-* Writing tests
-* Code review
-* Other guidelines
+* Добавить график отображающий корреляцию по преобразованию Фурье ("Частотный график Фурье");
+* Анализ интенсивности в области по двум координатам. Усредненная по области яркость во времени;
+* Трехмерный анализ интенсивности по трем координатам;
+* Подключение камер [ВИДЕОСКАН-2](http://videoscan.ru/page/880) или аналогов для снятия изображений и их анализ во время эксперимента.
 
-### Who do I talk to? ###
+# Техническая сторона #
 
-* Repo owner or admin
-* Other community or team contact
+* Язык C#
+* Разработно на технологии WPF с использованием компонентов от Telerik
+* Используется несколько доработанная версия библиотеки [pHash](http://www.phash.org/)
+
+# Screenshots #
+
+![Изображение главного окна Speckle-Studio](https://lh3.googleusercontent.com/QgCsYq-XIRfaf4er_7IIXS05zi2C9t-fWoO-FWElG4xHQ8MAUR6lQEYnsy4CAwVqoyPFT0-YFypqmYQ=w1834-h875)
