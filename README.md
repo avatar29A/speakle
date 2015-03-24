@@ -29,4 +29,4 @@
 
 # Screenshots #
 
-![Изображение главного окна Speckle-Studio](https://lh3.googleusercontent.com/QgCsYq-XIRfaf4er_7IIXS05zi2C9t-fWoO-FWElG4xHQ8MAUR6lQEYnsy4CAwVqoyPFT0-YFypqmYQ=w1834-h875)
+![Изображение главного окна Speckle-Studio](https://lh5.googleusercontent.com/TBTZCj1HfwOUBK9AxLXcAKIwHR3S9l0UAagvuj3SAlMcxeCI7av1wtIpJROFcxy5NMNzhA=w1834-h875)
