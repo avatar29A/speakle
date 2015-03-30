@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Hqub.Speckle.Core.Model;
 using Hqub.Speckle.GUI.Model.Events;
 
@@ -10,19 +11,8 @@ namespace Hqub.Speckle.GUI.Processing
         private readonly Core.ICorrelationEngine _engine;
         private readonly Events.CorrelationCalculatedEvent _calculateEvent;
         private readonly Events.CorrelationCalculateCompleateEvent _calculateCompleateEvent;
-        private readonly object _lock = new object();
 
-        private bool _isStopExperiment = false;
-        private Queue<ImageWrapper> _imageQueue;
-
-        #region Theading
-
-        private const int ThreadAmount = 1;
-        private int BatchSize = 0;
-
-        private List<ManualResetEventSlim> _lockThreads = new List<ManualResetEventSlim>();
-
-        #endregion
+        private bool _isStopExperiment;
 
         public CorrelationProcessing(Core.ICorrelationEngine engine)
         {
@@ -32,42 +22,14 @@ namespace Hqub.Speckle.GUI.Processing
                 Events.AggregationEventService.Instance.GetEvent<Events.CorrelationCalculateCompleateEvent>();
 
             var stopExperiment = Events.AggregationEventService.Instance.GetEvent<Events.StopExperimentEvent>();
-            stopExperiment.Subscribe(this.OnStopExperiment);
-
-            InitThreadPool();
+            stopExperiment.Subscribe(OnStopExperiment);
         }
 
         public void Start(ImageWrapper etalon, IList<ImageWrapper> images)
         {
             _isStopExperiment = false;
 
-            BatchSize = CalcBatchSize(images.Count);
-
-            ThreadPool.QueueUserWorkItem(
-                (arg) =>
-                    {
-                        _imageQueue = new Queue<ImageWrapper>(images);
-
-                        List<ImageWrapper> poolImages = null;
-                        do
-                        {
-                            for (var i = 0; i < ThreadAmount; i++)
-                            {
-                                poolImages = GetItemsFormQueue();
-
-                                var copyPoolImages = poolImages;
-                                var mre = _lockThreads[i];
-
-                                new Thread(() => Process(etalon, copyPoolImages, mre)).Start();
-                            }
-
-                            WaitAll(_lockThreads);
-
-                        }
-                        while (poolImages != null && poolImages.Count != 0);
-
-                        _calculateCompleateEvent.Publish(new CorrelationCalculateCompleateEventEntity());
-                    });
+            Task.Factory.StartNew(() => Process(etalon, images));
         }
 
         private void OnStopExperiment(object args)
@@ -75,75 +37,23 @@ namespace Hqub.Speckle.GUI.Processing
             _isStopExperiment = true;
         }
 
-        private int CalcBatchSize(int count)
-        {
-            if (count <= ThreadAmount)
-                return count;
-
-            return count/ThreadAmount;
-        }
-
-        private void WaitAll(IEnumerable<ManualResetEventSlim> threads)
-        {
-            foreach (var mre in threads)
-            {
-                mre.Wait();
-            }
-        }
-
-        private void InitThreadPool()
-        {
-            for (int i = 0; i < ThreadAmount; i++)
-            {
-                var l = new ManualResetEventSlim(false);
-                l.Reset();
-
-                _lockThreads.Add(l);
-                
-            }
-        }
-
-
-        private List<ImageWrapper> GetItemsFormQueue()
-        {
-            lock (_lock)
-            {
-                //TODO: Проверить как влияет на скоростьинициализация листа с заданным кол-м элементов
-                var pool = new List<ImageWrapper>(BatchSize*2);
-
-                for (var i = 0; i < BatchSize; i++)
-                {
-                    if (_imageQueue.Count != 0)
-                    {
-                        pool.Add(_imageQueue.Dequeue());
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                return pool;
-            }
-        }
-
-        private void Process(ImageWrapper etalon, List<ImageWrapper> images, ManualResetEventSlim mre)
+        private void Process(ImageWrapper etalon, IList<ImageWrapper> images)
         {
             var experiment = Core.Experiment.Get();
 
             if (images == null || images.Count == 0)
             {
-                mre.Set();
                 return;
             }
 
-            foreach (var image in images)
+            Parallel.ForEach(images, image =>
             {
-                if (_isStopExperiment) break;
+                if (_isStopExperiment) return;
 
                 var correlation = _engine.Compare(etalon.Path, image.Path, experiment.WorkAreay);
 #if DEBUG
-                System.Diagnostics.Debug.WriteLine("Correlation: {0}", correlation);
+                var time = experiment.StartExperiment.AddSeconds(experiment.Period*image.Number);
+                System.Diagnostics.Debug.WriteLine("Correlation: [{2} {3}] {0} - {1}", image.Name, correlation, image.Number, time);
 #endif
 
                 _calculateEvent.Publish(new CorrelationValue
@@ -151,12 +61,12 @@ namespace Hqub.Speckle.GUI.Processing
                     EtalonePath = etalon.Path,
                     ImagePath = image.Path,
                     ImageName = image.Name,
-                    Time = experiment.StartExperiment.AddSeconds(experiment.Period * image.Number),
+                    Time = experiment.StartExperiment.AddSeconds(experiment.Period*image.Number),
                     Value = correlation,
                 });
+            });
 
-                mre.Set();
-            }
+            _calculateCompleateEvent.Publish(new CorrelationCalculateCompleateEventEntity());
         }
     }
 }

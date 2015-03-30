@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -115,15 +116,13 @@ namespace Hqub.Speckle.GUI.Controls
 
         private void OpenWorkareaSettingsCommandExecute()
         {
-            var dialog = new Dialogs.WorkAreaSettingsDialog(new Rect(Workarea.X, Workarea.Y, Workarea.Width, Workarea.Height));
+            var dialog =
+                new Dialogs.WorkAreaSettingsDialog(new Rect(Workarea.X, Workarea.Y, Workarea.Width, Workarea.Height));
             dialog.ShowDialog();
-
 
             if (dialog.DialogResult == true)
             {
-                Workarea = new System.Drawing.Rectangle(dialog.X, dialog.Y, dialog.AreaWidth, dialog.AreaHeight);
-                DrawRectangle(dialog.X, dialog.Y, dialog.AreaWidth, dialog.AreaHeight);
-                
+                SetWorkarea(dialog.X, dialog.Y, dialog.AreaWidth, dialog.AreaHeight);
             }
         }
 
@@ -136,6 +135,13 @@ namespace Hqub.Speckle.GUI.Controls
             _eventAggregator = Events.AggregationEventService.Instance;
 
             _eventAggregator.GetEvent<Events.ExperimentCreatedEvent>().Subscribe(OnExperimentCreated);
+        }
+
+        private void SetWorkarea(int x, int y, int width, int height)
+        {
+            Workarea = new System.Drawing.Rectangle(x, y, width, height);
+            DrawRectangle(x, y, width, height);
+            Core.Experiment.Get().WorkAreay = Workarea;
         }
 
         private void OnExperimentCreated(Model.Events.ExperimentCreateEventEntity args)

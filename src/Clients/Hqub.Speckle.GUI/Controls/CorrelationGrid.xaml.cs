@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Hqub.Speckle.Core.Model;
 using JetBrains.Annotations;
 
@@ -56,7 +57,7 @@ namespace Hqub.Speckle.GUI.Controls
             {
                 CorrelationValues.Add(val);
                 Collections.Refresh();
-            });
+            }, DispatcherPriority.Background);
         }
 
         private void OnExperimentCreate(Model.Events.ExperimentCreateEventEntity entity)
