@@ -1,13 +1,15 @@
-﻿namespace Hqub.Speckle.Core.Correlation
+﻿using System;
+
+namespace Hqub.Speckle.Core.Correlation
 {
     using System.Drawing;
     using System.Threading;
 
     using Hqub.Speckle.Core.BitmapExtensions;
 
-    public class SignalLevelCorrelationEngine : ICorrelationEngine
+    public class SignalLevelCorrelationEngine : BaseCorrelationEngine
     {
-        public double Compare(string pathA, string pathB)
+        public override double Compare(string pathA, string pathB)
         {
             var image1 = new Bitmap(pathA);
             var image2 = new Bitmap(pathB);
@@ -15,30 +17,56 @@
             return Compare(image1, image2);
         }
 
-        public double Compare(string pathA, string pathB, Rectangle bound)
+        public override double Compare(string pathA, string pathB, Rectangle bound)
         {
-            var boundOnePixel = new Rectangle(bound.X, bound.Y, 1, 1);
-            var image1 = BitmapTools.CropImage(new Bitmap(pathA), boundOnePixel);
-            var image2 = BitmapTools.CropImage(new Bitmap(pathB), boundOnePixel);
+            var image2 = BitmapTools.CropImage(new Bitmap(pathB), bound);
 
-            return Compare(image1, image2);
+            // Для этого метода требуется только одно изображение:
+            return Compare(image2, image2);
         }
 
-        public double Compare(Bitmap imageA, Bitmap imageB)
+        public override double Compare(Bitmap imageA, Bitmap imageB)
         {
-            // Получаем одноканальное изображение:
-//            var grayA = BitmapTools.MakeGrayscale3(imageA);
-            var grayB = BitmapTools.MakeGrayscale3(imageB);
+            // Кол-во пикселей:
+            var amountA = imageA.Width * imageA.Height;
 
-//            var pixelA = grayA.GetPixel(0, 0);
-            var pixelB = grayB.GetPixel(0, 0);
+            var lockSource = new LockBitmap(imageA);
+            lockSource.LockBits();
 
-//            var binA = pixelA.R;
-            var binB = pixelB.R;
+            double sum = 0;
+            for (var i = 0; i < lockSource.Width; ++i)
+            {
+                for (var j = 0; j < lockSource.Height; ++j)
+                {
+                    var pixel = lockSource.GetPixel(i, j);
 
-            Thread.Sleep(100);
+                    sum += CalcBrightness(pixel.R, pixel.G, pixel.B);
+                }
+            }
 
-            return binB / 100.0;    
+            lockSource.UnlockBits();
+
+            return (sum/amountA)/100;
+        }
+
+        private double CalcBrightness(double r, double g, double b)
+        {
+            return CalcBrightness3(r, g, b);
+        }
+
+        private double CalcBrightness1(double r, double g, double b)
+        {
+            return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        }
+
+        private double CalcBrightness2(double r, double g, double b)
+        {
+            return 0.299 * r + 0.587 * g + 0.114 * b;
+        }
+
+        private double CalcBrightness3(double r, double g, double b)
+        {
+            return Math.Sqrt(0.299*Math.Pow(r, 2) + 0.587*Math.Pow(g, 2) + 0.114*Math.Pow(b, 2));
         }
 
         public ILogger Logger { get; set; }

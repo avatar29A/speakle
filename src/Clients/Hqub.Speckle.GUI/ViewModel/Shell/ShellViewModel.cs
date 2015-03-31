@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Hqub.Speckle.Core.Correlation;
 using Hqub.Speckle.Core.Model;
 using Hqub.Speckle.GUI.Model.Events;
@@ -196,7 +197,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             set
             {
                 _imageProcessingAmount = value;
-                OnPropertyChanged(() => ImageProcessingAmount);
+                App.Current.Dispatcher.BeginInvoke(new Action(() => OnPropertyChanged(() => ImageProcessingAmount)), DispatcherPriority.Send);
             }
         }
 
@@ -231,6 +232,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             {
                 this.isSpegoAlgChecked = value;
                 this.isPHashChecked = !value;
+                this.isSignalAlgChecked = !value;
 
                 this.RaiseMenuItems();
             }
@@ -266,6 +268,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
             {
                 this.isPHashChecked = value;
                 this.isSpegoAlgChecked = !value;
+                this.isSignalAlgChecked = !value;
 
                 this.RaiseMenuItems();
             }
@@ -398,7 +401,10 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         {
             ++ImageProcessingAmount;
             LastProcessingFileName = val.ImageName;
-            OnPropertyChanged(() => ProgresStatusText);
+
+            App.Current.Dispatcher.BeginInvoke(new Action(() => OnPropertyChanged(() => ProgresStatusText)),
+                DispatcherPriority.Send);
+            ;
         }
 
         public ICommand ShowImageCommand

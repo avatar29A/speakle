@@ -38,6 +38,7 @@
                       SelectedItem="{Binding ElementName=_this, Path=SelectedCorrelation, Mode=TwoWay}"
                       Grid.Row="1"
                       EnableRowVirtualization="True"
+                      EnableColumnVirtualization="True"
                       ScrollViewer.CanContentScroll="True" 
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                       MouseDoubleClick="Control_OnMouseDoubleClick"

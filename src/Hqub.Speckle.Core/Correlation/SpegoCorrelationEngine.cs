@@ -5,9 +5,9 @@ using Hqub.Speckle.Core.BitmapExtensions;
 
 namespace Hqub.Speckle.Core.Correlation
 {
-    public class SpegoCorrelationEngine : ICorrelationEngine
+    public class SpegoCorrelationEngine : BaseCorrelationEngine
     {
-        public double Compare(string pathA, string pathB)
+        public override double Compare(string pathA, string pathB)
         {
             var image1 = new Bitmap(pathA);
             var image2 = new Bitmap(pathB);
@@ -15,7 +15,7 @@ namespace Hqub.Speckle.Core.Correlation
             return Compare(image1, image2);
         }
 
-        public double Compare(string pathA, string pathB, Rectangle bound)
+        public override double Compare(string pathA, string pathB, Rectangle bound)
         {
 //            bound = new Rectangle(437, 391, 634-437, 527-391);
             var image1 = BitmapTools.CropImage(new Bitmap(pathA), bound);
@@ -24,7 +24,7 @@ namespace Hqub.Speckle.Core.Correlation
             return Compare(image1, image2);
         }
 
-        public double Compare(Bitmap imageA, Bitmap imageB)
+        public override double Compare(Bitmap imageA, Bitmap imageB)
         {
             // Получаем одноканальное изображение:
             var grayA = imageA; //BitmapTools.ConvertBitmapToGrayScale(image1);
@@ -69,37 +69,7 @@ namespace Hqub.Speckle.Core.Correlation
             return numenator / denumerator;
         }
 
-        public ILogger Logger { get; set; }
+        public new ILogger Logger { get; set; }
 
-        #region Private Methods
-
-        /// <summary>
-        /// Раскалдывает картинку в одномерный массив
-        /// </summary>
-        /// <param name="source">Картинка</param>
-        /// <returns>Массив пикселей</returns>
-        private int[] ScaffBitmap(Bitmap source)
-        {
-            var lockSource = new LockBitmap(source);
-            lockSource.LockBits();
-
-            var m = new int[lockSource.Width * lockSource.Height];
-            var counter = 0;
-
-            for (var i = 0; i < lockSource.Width; ++i)
-            {
-                for (var j = 0; j < lockSource.Height; ++j)
-                {
-                    m[counter] = lockSource.GetPixel(i, j).R;
-                    ++counter;
-                }
-            }
-
-            lockSource.UnlockBits();
-
-            return m;
-        }
-
-        #endregion
     }
 }

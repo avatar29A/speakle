@@ -8,7 +8,7 @@ namespace Hqub.Speckle.GUI
 {
     public class Metadata
     {
-        public const string Version = "0.9.9.1";
+        public const string Version = "0.9.9.5";
 
         public const string Title = "IDA Speckle Studio (x86) v" + Version;
     }

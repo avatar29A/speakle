@@ -45,7 +45,7 @@ namespace Hqub.Speckle.GUI.Controls
 
         private void SetupChartAxis()
         {
-            this.radChart.DefaultView.ChartArea.AxisY.MinValue = 0;
+            this.radChart.DefaultView.ChartArea.AxisY.MinValue = -1;
             this.radChart.DefaultView.ChartArea.AxisY.MaxValue = 1;
             this.radChart.DefaultView.ChartArea.AxisY.Step = 0.10;
             this.radChart.DefaultView.ChartArea.AxisY.AutoRange = false;
