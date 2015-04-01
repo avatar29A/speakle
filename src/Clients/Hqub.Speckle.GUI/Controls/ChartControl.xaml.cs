@@ -1,4 +1,6 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Threading;
+using Hqub.Speckle.Core;
 
 namespace Hqub.Speckle.GUI.Controls
 {
@@ -12,7 +14,7 @@ namespace Hqub.Speckle.GUI.Controls
     using System.Windows.Input;
     using System.Windows.Media.Imaging;
 
-    using Hqub.Speckle.Core.Model;
+    using Core.Model;
     using Microsoft.Practices.Prism.PubSubEvents;
     using Microsoft.Win32;
 
@@ -24,6 +26,7 @@ namespace Hqub.Speckle.GUI.Controls
     public partial class ChartControl : UserControl, INotifyPropertyChanged
     {
         private IEventAggregator _eventAggregator;
+        private Core.Experiment _experiment;
 
         private List<CorrelationValue> _correlationValues; 
         private ObservableCollection<CorrelationValue> values;
@@ -34,22 +37,40 @@ namespace Hqub.Speckle.GUI.Controls
 
             _eventAggregator = Events.AggregationEventService.Instance;
             radChart.DefaultView.ChartLegend.Visibility = Visibility.Collapsed;
+            _experiment = Core.Experiment.Get();
             
             Values = new ObservableCollection<CorrelationValue>();
             _correlationValues = new List<CorrelationValue>();
 
-            this.SetupChartAxis();
+            SetupChartAxis();
 
             SubsribeOnEvents();
         }
 
         private void SetupChartAxis()
         {
-            this.radChart.DefaultView.ChartArea.AxisY.MinValue = -1;
-            this.radChart.DefaultView.ChartArea.AxisY.MaxValue = 1;
-            this.radChart.DefaultView.ChartArea.AxisY.Step = 0.10;
-            this.radChart.DefaultView.ChartArea.AxisY.AutoRange = false;
-            this.radChart.DefaultView.ChartArea.EnableAnimations = false;
+            if (_experiment.CurrentEngineName == StaticVariable.SignalLeveAlgCode)
+                SetupCharAxisToBright();
+            else
+                SetupCharToCorrelation();
+        }
+
+        private void SetupCharToCorrelation(bool isMinus = false)
+        {
+            radChart.DefaultView.ChartArea.AxisY.MinValue = isMinus ? -1 : 0;
+            radChart.DefaultView.ChartArea.AxisY.MaxValue = 1;
+            radChart.DefaultView.ChartArea.AxisY.Step = 0.10;
+            radChart.DefaultView.ChartArea.AxisY.AutoRange = false;
+            radChart.DefaultView.ChartArea.EnableAnimations = false;
+        }
+
+        private void SetupCharAxisToBright()
+        {
+            radChart.DefaultView.ChartArea.AxisY.MinValue = 0;
+            radChart.DefaultView.ChartArea.AxisY.MaxValue = 260;
+            radChart.DefaultView.ChartArea.AxisY.Step = 10;
+            radChart.DefaultView.ChartArea.AxisY.AutoRange = false;
+            radChart.DefaultView.ChartArea.EnableAnimations = false;
         }
 
         #region Commands
@@ -128,6 +149,8 @@ namespace Hqub.Speckle.GUI.Controls
         {
             Values.Clear();
             _correlationValues.Clear();
+
+            SetupChartAxis();
         }
 
         private void OnCompleate(object e)
@@ -139,19 +162,24 @@ namespace Hqub.Speckle.GUI.Controls
 
         private void OnCalculatedCorrelationEvent(CorrelationValue val)
         {
-            this.Dispatcher.Invoke(
+            Dispatcher.Invoke(
                 () =>
+                {
+                    ++_counter;
+                    _correlationValues.Add(val);
+
+                    if (_counter%10 == 0)
                     {
-                        ++_counter;
-                        _correlationValues.Add(val);
+                        _counter = 0;
 
-                        if (_counter % 10 == 0)
-                        {
-                            _counter = 0;
-                            Values = new ObservableCollection<CorrelationValue>(_correlationValues.OrderBy(x => x.Time));
-                        }
+                        // Если есть отрицательные значения корреляции меняет оси с (0 до 1) на (-1 до 1):
+                        if (val.Value < 0)
+                            SetupCharToCorrelation(true);
 
-                    });
+                        Values = new ObservableCollection<CorrelationValue>(_correlationValues.OrderBy(x => x.Time));
+                    }
+
+                }, DispatcherPriority.Background);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

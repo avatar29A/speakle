@@ -3,9 +3,7 @@
 namespace Hqub.Speckle.Core.Correlation
 {
     using System.Drawing;
-    using System.Threading;
-
-    using Hqub.Speckle.Core.BitmapExtensions;
+    using BitmapExtensions;
 
     public class SignalLevelCorrelationEngine : BaseCorrelationEngine
     {
@@ -46,7 +44,7 @@ namespace Hqub.Speckle.Core.Correlation
 
             lockSource.UnlockBits();
 
-            return (sum/amountA)/100;
+            return sum/amountA;
         }
 
         private double CalcBrightness(double r, double g, double b)
@@ -69,6 +67,6 @@ namespace Hqub.Speckle.Core.Correlation
             return Math.Sqrt(0.299*Math.Pow(r, 2) + 0.587*Math.Pow(g, 2) + 0.114*Math.Pow(b, 2));
         }
 
-        public ILogger Logger { get; set; }
+        public new ILogger Logger { get; set; }
     }
 }

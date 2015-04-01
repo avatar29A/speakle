@@ -22,6 +22,8 @@ namespace Hqub.Speckle.Core
 
         #region Public Properties
 
+        public string CurrentEngineName { get; set; }
+
         public ObservableCollection<ImageWrapper> Images
         {
             get { return _images; }
@@ -85,5 +87,6 @@ namespace Hqub.Speckle.Core
 
     public interface IExperiment
     {
+        string CurrentEngineName { get; set; }
     }
 }

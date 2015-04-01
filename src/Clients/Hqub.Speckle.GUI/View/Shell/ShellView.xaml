@@ -193,7 +193,7 @@
 
                     <telerikDocking:RadSplitContainer InitialPosition="DockedBottom">
                         <telerikDocking:RadPaneGroup>
-                            <telerikDocking:RadPane Header="Значения корреляции"
+                            <telerikDocking:RadPane Header="Значения корреляции\интенсивности"
                                                     CanUserClose="False"
                                                     >
                                 <controls:CorrelationGrid/>

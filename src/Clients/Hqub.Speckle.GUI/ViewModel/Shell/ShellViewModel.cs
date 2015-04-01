@@ -44,7 +44,7 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
         public ShellViewModel()
         {
             _experiment = Experiment.Get();
-            EventAggregator = Events.AggregationEventService.Instance;
+            EventAggregator = AggregationEventService.Instance;
             IsSpegoAlgChecked = true;
 
             _engines = new Dictionary<string, Type>
@@ -63,17 +63,17 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
 
         private void SubsribeOnEvents()
         {
-            var correlationCalcEvent = EventAggregator.GetEvent<Events.CorrelationCalculatedEvent>();
+            var correlationCalcEvent = EventAggregator.GetEvent<CorrelationCalculatedEvent>();
             correlationCalcEvent.Subscribe(OnValueCalcuted);
 
             var correlationCalcCompleatedEvent = EventAggregator.GetEvent<Events.CorrelationCalculateCompleateEvent>();
             correlationCalcCompleatedEvent.Subscribe(CalculateCorrelationCompleated);
 
-            var etalonLoadedEvent = EventAggregator.GetEvent<Events.EtalonLoadedEvent>();
+            var etalonLoadedEvent = EventAggregator.GetEvent<EtalonLoadedEvent>();
             etalonLoadedEvent.Subscribe(SetEtalon);
 
             var experimentPhotoSeletChangedEvent = EventAggregator.GetEvent<Core.Events.ExperimentPhotoSeletChangedEvent>();
-            experimentPhotoSeletChangedEvent.Subscribe(image => OnPropertyChanged(() => this.FrameToolbarInfo));
+            experimentPhotoSeletChangedEvent.Subscribe(image => OnPropertyChanged(() => FrameToolbarInfo));
 
         }
 
@@ -234,6 +234,8 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
                 this.isPHashChecked = !value;
                 this.isSignalAlgChecked = !value;
 
+                UpdateCurrentEngine();
+
                 this.RaiseMenuItems();
             }
         }
@@ -254,6 +256,8 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
                 this.isSpegoAlgChecked = !value;
                 this.isPHashChecked = !value;
 
+                UpdateCurrentEngine();
+
                 this.RaiseMenuItems();
             }
         }
@@ -270,7 +274,21 @@ namespace Hqub.Speckle.GUI.ViewModel.Shell
                 this.isSpegoAlgChecked = !value;
                 this.isSignalAlgChecked = !value;
 
+                UpdateCurrentEngine();
+
                 this.RaiseMenuItems();
+            }
+        }
+
+        private void UpdateCurrentEngine()
+        {
+            if(IsPHashChecked)
+                Experiment.CurrentEngineName = StaticVariable.PHashAlgCode;
+            else if(IsSpegoAlgChecked)
+                Experiment.CurrentEngineName = StaticVariable.SpegoAlgCode;
+            else
+            {
+                Experiment.CurrentEngineName = StaticVariable.SignalLeveAlgCode;
             }
         }
 
